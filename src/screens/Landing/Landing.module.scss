@@ -1,0 +1,59 @@
+@import '/src/styles/base';
+
+.container {
+  @include container;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons {
+  @include row;
+  justify-content: center;
+  margin-top: 5px;
+
+  button {
+    margin: 7px;
+  }
+}
+
+.landing {
+  @include col;
+  gap: 15px;
+  margin-top: -18%;
+}
+
+.logo {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.row {
+  @include row;
+  justify-content: space-between;
+  padding: 14px;
+  flex-wrap: wrap;
+  font-size: small;
+
+  a {
+    @include themed-styles {
+      color: themed-color(language);
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @include mobile {
+      display: none;
+    }
+  }
+}
+
+.content {
+  gap: 15px;
+  display: flex;
+
+  @include mobile {
+    display: none;
+  }
+}

@@ -1,0 +1,48 @@
+$desktop-width: 1000px;
+
+@mixin row {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin col {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin container {
+  @include col;
+  flex: 1;
+}
+
+@mixin mobile {
+  @media (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin pad-left {
+  @media (min-width: 1300px) {
+    padding-left: 169px;
+  }
+
+  @media (max-width: 1299px) and (min-width: 1121px) {
+    padding-left: calc(((100vw - 1065px) / 2) - 11px);
+  }
+
+  @media (max-width: 1120px) and (min-width: #{$desktop-width}) {
+    padding-left: 17px;
+  }
+
+  @include mobile {
+    padding-left: 0px;
+  }
+}
+
+@mixin hide-scroll {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
