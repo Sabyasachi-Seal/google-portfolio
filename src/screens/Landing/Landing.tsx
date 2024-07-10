@@ -16,6 +16,8 @@ interface LandingProps {
   onSearchClick: VoidFunction
 }
 
+const emptyFunc = () => {}
+
 export const Landing: React.FC<LandingProps> = ({
   searchText,
   searchRef,
@@ -36,8 +38,8 @@ export const Landing: React.FC<LandingProps> = ({
         </div>
         <SearchBar searchRef={searchRef} searchText={searchText} landing />
         <div className={styles.buttons}>
-          <LandingButton onClick={onSearchClick} buttonRef={buttonRef}>
-            Google Search
+          <LandingButton onClick={emptyFunc} buttonRef={buttonRef}>
+            How can I help you ?
           </LandingButton>
           <LandingButton onClick={redirectToLucky}>
             I&apos;m Feeling Lucky
