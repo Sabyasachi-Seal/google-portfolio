@@ -31,7 +31,10 @@
 .row {
   @include row;
   justify-content: space-between;
-  padding: 14px;
+  align-items: center;
+  align-self: center;
+  padding: 25px;
+  margin-right: 60px;
   flex-wrap: wrap;
   font-size: small;
 
