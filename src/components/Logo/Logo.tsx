@@ -18,7 +18,7 @@ export const Logo: React.FC<Props> = ({ height = 92, width = 272 }) => {
       width={width}
       alt="themed-logo"
       src={
-        theme === 'light' ? '/images/google_light.png' : '/images/google.png'
+        theme === 'light' ? '/images/google.png' : '/images/google_light.png'
       }
     />
   )
