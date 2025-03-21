@@ -20,6 +20,7 @@ const nextConfig = {
       'ph-files.imgix.net',
       'img.freepik.com',
       'github.githubassets.com',
+      'github.githubassets.com',
       '*',
     ],
     minimumCacheTTL: 86400,
