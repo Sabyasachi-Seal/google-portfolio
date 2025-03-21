@@ -27,6 +27,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    loader: 'akamai',
+    path: './public',
+  },
 }
 
 module.exports = nextConfig
