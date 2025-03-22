@@ -10,6 +10,7 @@
     "export": "npx next export"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "@nivo/core": "^0.79.0",
     "@nivo/line": "^0.79.1",
     "classnames": "^2.3.1",

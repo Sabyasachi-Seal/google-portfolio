@@ -1,5 +1,4 @@
-// src/components/About.tsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { friends, profiles } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
@@ -15,7 +14,6 @@ const globe = (
   </svg>
 )
 
-// Structured user info for the API
 const userInfo = {
   name: 'Sabyasachi Seal',
   profession: 'Indian software engineer, web author, and businessman',
@@ -35,15 +33,36 @@ const userInfo = {
 
 export const About: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false)
-  const [messages, setMessages] = useState<{ user: string; bot: string }[]>([])
+  const [hasStartedChatting, setHasStartedChatting] = useState(false)
+  const [messages, setMessages] = useState<{ user: string; bot: string }[]>([
+    {
+      user: '',
+      bot: "Hello there! How can I help you today? I'm Sabyasachi Seal, a software engineer from Kolkata. I'm passionate about coding and building new things. Only answer in unformatted text.",
+    },
+  ])
   const [input, setInput] = useState('')
-  const [typingMessage, setTypingMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const chatWindowRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTo({
+        top: chatWindowRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  }, [messages])
 
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    const updatedMessages = [...messages, { user: input, bot: '' }]
+    // Mark that the user has started chatting
+    if (!hasStartedChatting) {
+      setHasStartedChatting(true)
+      setIsChatOpen(true)
+    }
+
+    const updatedMessages = [...messages, { user: input, bot: 'Thinking...' }]
     setMessages(updatedMessages)
     setInput('')
     setIsTyping(true)
@@ -54,14 +73,19 @@ export const About: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input, userInfo }),
       })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch response from Gemini API')
+      }
+
       const data = await response.json()
       const botResponse = data.response || 'Sorry, something went wrong.'
 
       // Simulate typing effect
       let currentText = ''
-      for (let i = 0; i < botResponse.length; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 30)) // Adjust speed (30ms per char)
-        currentText += botResponse[i]
+      for (const char of botResponse) {
+        await new Promise((resolve) => setTimeout(resolve, 30)) // 30ms per character
+        currentText += char
         updatedMessages[updatedMessages.length - 1].bot = currentText
         setMessages([...updatedMessages])
       }
@@ -76,100 +100,107 @@ export const About: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.about}>
-        <h4>About</h4>
-        <div className={styles.website}>
-          {globe}
-          <a target="_blank" href="http://sabyasachiseal.com" rel="noreferrer">
-            sabyasachiseal.com
-          </a>
+      {!hasStartedChatting ? (
+        <div className={`${styles.about} ${isChatOpen ? styles.slideOut : ''}`}>
+          <h4>About</h4>
+          <div className={styles.website}>
+            {globe}
+            <a
+              target="_blank"
+              href="http://sabyasachiseal.com"
+              rel="noreferrer"
+            >
+              sabyasachiseal.com
+            </a>
+          </div>
+          <div className={styles.descriptionWrapper}>
+            <p className={styles.description}>
+              Sabyasachi Seal is a Indian software engineer, web author, and
+              businessman. He is currently located in{' '}
+              <b>Kolkata, West Bengal,</b> , He is a avid coder and loves to
+              build new things. He is a part of multiple commnuties like MLSA,
+              GDSC and AWS Community Builders. He is known on Github for his
+              projects and occasionally posts new blogs on Mediun. Sabyasachi
+              has about 1 year of experience in the software engineering
+              industry and still continues to expore more and make projects.{' '}
+            </p>
+          </div>
+          <div className={styles.stat}>
+            <span>Born: </span>June, 2002 (age{' '}
+            {new Date(Date.now() - new Date(2002, 5).getTime()).getFullYear() -
+              1970}{' '}
+            years),{' '}
+            <a
+              href="https://www.google.com/search?q=cape+town&sca_esv=599792272&biw=1280&bih=634&sxsrf=ACQVn08lCKYhcJKz0p7EdS1upai176uH9w%3A1705670213800&ei=RXaqZZnCMLiThbIPo96VyAE&gs_ssp=eJzj4tDP1TcwrMwyMmD04kxOLEhVKMkvzwMAP7oGWQ&oq=cape+town&gs_lp=Egxnd3Mtd2l6LXNlcnAiCWNhcGUgdG93bioCCAAyEBAuGIAEGIoFGEMYsQMYgwEyCxAAGIAEGLEDGIMBMgoQABiABBiKBRhDMgsQABiABBixAxiDATIKEAAYgAQYigUYQzIKEAAYgAQYigUYQzIKEC4YQxiABBiKBTILEC4YrwEYxwEYgAQyBRAAGIAEMgsQABiABBixAxiDATIfEC4YgAQYigUYQxixAxiDARiXBRjcBBjeBBjgBNgBA0iFKFDtCVj2HXACeAGQAQGYAewGoAHpIqoBCTMtMi4yLjIuMrgBAcgBAPgBAcICChAAGEcY1gQYsAPCAg0QABiABBiKBRhDGLADwgIOEAAY5AIY1gQYsAPYAQHCAhMQLhiABBiKBRhDGMgDGLAD2AECwgIEECMYJ8ICChAjGIAEGIoFGCfCAgoQLhiABBiKBRhDwgIOEAAYgAQYigUYsQMYgwHCAhQQLhiABBiKBRixAxiDARjHARjRA8ICEBAAGIAEGIoFGEMYsQMYgwHiAwQYACBBiAYBkAYSugYGCAEQARgJugYGCAIQARgIugYGCAMQARgU&sclient=gws-wiz-serp"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Kolkata
+            </a>
+          </div>
+          <div className={styles.stat}>
+            <span>Education: </span>
+            <a
+              href="https://www.ticollege.ac.in/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Techno Main Salt Lake
+            </a>{' '}
+            (2024)
+          </div>
+          <div className={styles.stat}>
+            <span>Skilled In: </span>Python, DevOps, Cloud (2024)
+            <a
+              href="https://www.linkedin.com/in/sabyasachi-seal-4461711bb/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {' '}
+              Linkedin
+            </a>
+          </div>
+          <div className={styles.inputArea}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder="Ask me anything about Sabyasachi..."
+            />
+            <button onClick={handleSendMessage}>Send</button>
+          </div>
+          <div className={styles.border} />
         </div>
-        <p className={styles.description}>
-          Sabyasachi Seal is a Indian software engineer, web author, and
-          businessman. He is currently located in <b>Kolkata, West Bengal,</b> ,
-          He is a avid coder and loves to build new things. He is a part of
-          multiple commnuties like MLSA, GDSC and AWS Community Builders. He is
-          known on Github for his projects and occasionally posts new blogs on
-          Mediun. Sabyasachi has about 1 year of experience in the software
-          engineering industry and still continues to expore more and make
-          projects.{' '}
-        </p>
-        <div className={styles.stat}>
-          <span>Born: </span>June, 2002 (age{' '}
-          {new Date(Date.now() - new Date(2002, 5).getTime()).getFullYear() -
-            1970}{' '}
-          years),{' '}
-          <a
-            href="https://www.google.com/search?q=cape+town&sca_esv=599792272&biw=1280&bih=634&sxsrf=ACQVn08lCKYhcJKz0p7EdS1upai176uH9w%3A1705670213800&ei=RXaqZZnCMLiThbIPo96VyAE&gs_ssp=eJzj4tDP1TcwrMwyMmD04kxOLEhVKMkvzwMAP7oGWQ&oq=cape+town&gs_lp=Egxnd3Mtd2l6LXNlcnAiCWNhcGUgdG93bioCCAAyEBAuGIAEGIoFGEMYsQMYgwEyCxAAGIAEGLEDGIMBMgoQABiABBiKBRhDMgsQABiABBixAxiDATIKEAAYgAQYigUYQzIKEAAYgAQYigUYQzIKEC4YQxiABBiKBTILEC4YrwEYxwEYgAQyBRAAGIAEMgsQABiABBixAxiDATIfEC4YgAQYigUYQxixAxiDARiXBRjcBBjeBBjgBNgBA0iFKFDtCVj2HXACeAGQAQGYAewGoAHpIqoBCTMtMi4yLjIuMrgBAcgBAPgBAcICChAAGEcY1gQYsAPCAg0QABiABBiKBRhDGLADwgIOEAAY5AIY1gQYsAPYAQHCAhMQLhiABBiKBRhDGMgDGLAD2AECwgIEECMYJ8ICChAjGIAEGIoFGCfCAgoQLhiABBiKBRhDwgIOEAAYgAQYigUYsQMYgwHCAhQQLhiABBiKBRixAxiDARjHARjRA8ICEBAAGIAEGIoFGEMYsQMYgwHiAwQYACBBiAYBkAYSugYGCAEQARgJugYGCAIQARgIugYGCAMQARgU&sclient=gws-wiz-serp"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Kolkata
-          </a>
-        </div>
-        <div className={styles.stat}>
-          <span>Education: </span>
-          <a
-            href="https://www.ticollege.ac.in/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Techno Main Salt Lake
-          </a>{' '}
-          (2024)
-        </div>
-        <div className={styles.stat}>
-          <span>Skilled In: </span>Python, DevOps, Cloud (2024)
-          <a
-            href="https://www.linkedin.com/in/sabyasachi-seal-4461711bb/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {' '}
-            Linkedin
-          </a>
-        </div>
-        <button
-          className={`${styles.chatButton} ${
-            isChatOpen ? styles.chatButtonShort : ''
-          }`}
-          onClick={() => setIsChatOpen(!isChatOpen)}
-        >
-          {isChatOpen ? 'Close Chat' : 'Chat with me'}
-        </button>
-        {isChatOpen && (
-          <div className={styles.chatBox}>
-            <div className={styles.chatWindow}>
-              {messages.map((msg, index) => (
-                <div key={index}>
+      ) : (
+        <div className={`${styles.chat} ${styles.slideIn}`}>
+          <div className={styles.chatWindow} ref={chatWindowRef}>
+            {messages.map((msg, index) => (
+              <div key={index}>
+                {msg.user && (
                   <div className={styles.userMessage}>
                     <strong>You:</strong> {msg.user}
                   </div>
-                  <div className={styles.botMessage}>
-                    <strong>Bot:</strong> {msg.bot}
-                  </div>
-                </div>
-              ))}
-              {isTyping && (
+                )}
                 <div className={styles.botMessage}>
-                  <strong>Bot:</strong> Typing...
+                  <strong>Sabyasachi:</strong> {msg.bot}
                 </div>
-              )}
-            </div>
-            <div className={styles.inputArea}>
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="Ask me anything about Sabyasachi..."
-              />
-              <button onClick={handleSendMessage}>Send</button>
-            </div>
+              </div>
+            ))}
           </div>
-        )}
-        <div className={styles.border} />
-      </div>
+          <div className={styles.inputArea}>
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder="Ask me anything about Sabyasachi..."
+            />
+            <button onClick={handleSendMessage}>Send</button>
+          </div>
+          <div className={styles.border} />
+        </div>
+      )}
       <div className={styles.profiles}>
         <h4>Profiles</h4>
         <div className={styles.socials}>
