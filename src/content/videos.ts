@@ -2,11 +2,13 @@ import { ComponentProps } from 'react';
 import { VideoResult } from 'src/components';
 
 type Video = ComponentProps<typeof VideoResult>;
-const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const ufeedUrl = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLQC9gmr8t9R9tUE68IHZwpMeR8-DgqJkT';
 export async function fetchVideosFromXML(feedUrl: string = ufeedUrl): Promise<Video[]> {
   try {
-    const response = await fetch(feedUrl);
+    const response = await fetch(feedUrl, {
+      mode: 'no-cors',
+    });
+    console.log('response:', response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
