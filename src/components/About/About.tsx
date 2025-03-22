@@ -1,3 +1,5 @@
+// src/components/About.tsx
+import { useState, useEffect } from 'react'
 import { friends, profiles } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
@@ -13,14 +15,72 @@ const globe = (
   </svg>
 )
 
+// Structured user info for the API
+const userInfo = {
+  name: 'Sabyasachi Seal',
+  profession: 'Indian software engineer, web author, and businessman',
+  location: 'Kolkata, West Bengal',
+  interests: 'avid coder, loves to build new things',
+  communities: ['MLSA', 'GDSC', 'AWS Community Builders'],
+  github: 'known for projects',
+  medium: 'occasionally posts blogs',
+  experience: '1 year in software engineering',
+  born: 'June 2002',
+  age: new Date(Date.now() - new Date(2002, 5).getTime()).getFullYear() - 1970,
+  education: 'Techno Main Salt Lake (2024)',
+  skills: ['Python', 'DevOps', 'Cloud'],
+  linkedin: 'https://www.linkedin.com/in/sabyasachi-seal-4461711bb/',
+  website: 'http://sabyasachiseal.com',
+}
+
 export const About: React.FC = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [messages, setMessages] = useState<{ user: string; bot: string }[]>([])
+  const [input, setInput] = useState('')
+  const [typingMessage, setTypingMessage] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
+  const handleSendMessage = async () => {
+    if (!input.trim()) return
+
+    const updatedMessages = [...messages, { user: input, bot: '' }]
+    setMessages(updatedMessages)
+    setInput('')
+    setIsTyping(true)
+
+    try {
+      const response = await fetch('/api/callGeminiApi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: input, userInfo }),
+      })
+      const data = await response.json()
+      const botResponse = data.response || 'Sorry, something went wrong.'
+
+      // Simulate typing effect
+      let currentText = ''
+      for (let i = 0; i < botResponse.length; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 30)) // Adjust speed (30ms per char)
+        currentText += botResponse[i]
+        updatedMessages[updatedMessages.length - 1].bot = currentText
+        setMessages([...updatedMessages])
+      }
+    } catch (error) {
+      updatedMessages[updatedMessages.length - 1].bot =
+        'Sorry, something went wrong.'
+      setMessages([...updatedMessages])
+    } finally {
+      setIsTyping(false)
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.about}>
         <h4>About</h4>
         <div className={styles.website}>
           {globe}
-          <a target="_blank" href="http://sabyasachiseal.com">
+          <a target="_blank" href="http://sabyasachiseal.com" rel="noreferrer">
             sabyasachiseal.com
           </a>
         </div>
@@ -36,7 +96,7 @@ export const About: React.FC = () => {
         </p>
         <div className={styles.stat}>
           <span>Born: </span>June, 2002 (age{' '}
-          {new Date(Date.now() - new Date(2002, 0o2).getTime()).getFullYear() -
+          {new Date(Date.now() - new Date(2002, 5).getTime()).getFullYear() -
             1970}{' '}
           years),{' '}
           <a
@@ -47,9 +107,6 @@ export const About: React.FC = () => {
             Kolkata
           </a>
         </div>
-        {/* <div className={styles.stat}>
-          <span>Age: </span>22
-        </div> */}
         <div className={styles.stat}>
           <span>Education: </span>
           <a
@@ -70,9 +127,47 @@ export const About: React.FC = () => {
           >
             {' '}
             Linkedin
-          </a>{' '}
+          </a>
         </div>
-
+        <button
+          className={`${styles.chatButton} ${
+            isChatOpen ? styles.chatButtonShort : ''
+          }`}
+          onClick={() => setIsChatOpen(!isChatOpen)}
+        >
+          {isChatOpen ? 'Close Chat' : 'Chat with me'}
+        </button>
+        {isChatOpen && (
+          <div className={styles.chatBox}>
+            <div className={styles.chatWindow}>
+              {messages.map((msg, index) => (
+                <div key={index}>
+                  <div className={styles.userMessage}>
+                    <strong>You:</strong> {msg.user}
+                  </div>
+                  <div className={styles.botMessage}>
+                    <strong>Bot:</strong> {msg.bot}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className={styles.botMessage}>
+                  <strong>Bot:</strong> Typing...
+                </div>
+              )}
+            </div>
+            <div className={styles.inputArea}>
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Ask me anything about Sabyasachi..."
+              />
+              <button onClick={handleSendMessage}>Send</button>
+            </div>
+          </div>
+        )}
         <div className={styles.border} />
       </div>
       <div className={styles.profiles}>
