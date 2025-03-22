@@ -24,7 +24,7 @@ export const Home: NextPage = () => {
         <div className={styles.title}>
           <div className={styles.headshot}>
             <Image
-              src="/images/headshot.jpg"
+              src="/images/headshot.png"
               alt="profile picture"
               height={56}
               width={56.1}

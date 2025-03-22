@@ -36,9 +36,14 @@ export const Landing: React.FC<LandingProps> = ({
         <div className={styles.logo}>
           <Logo />
         </div>
-        <SearchBar searchRef={searchRef} searchText={searchText} landing />
+        <SearchBar
+          clickFunc={onSearchClick}
+          searchRef={searchRef}
+          searchText={searchText}
+          landing
+        />
         <div className={styles.buttons}>
-          <LandingButton onClick={emptyFunc} buttonRef={buttonRef}>
+          <LandingButton onClick={onSearchClick} buttonRef={buttonRef}>
             How can I help you ?
           </LandingButton>
           <LandingButton onClick={redirectToLucky}>

@@ -47,9 +47,9 @@ export const About: React.FC = () => {
             Kolkata
           </a>
         </div>
-        <div className={styles.stat}>
+        {/* <div className={styles.stat}>
           <span>Age: </span>22
-        </div>
+        </div> */}
         <div className={styles.stat}>
           <span>Education: </span>
           <a

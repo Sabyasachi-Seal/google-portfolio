@@ -81,12 +81,14 @@ interface Props {
   searchText?: string
   searchRef?: LegacyRef<HTMLInputElement>
   landing?: boolean
+  clickFunc?: VoidFunction
 }
 
 export const SearchBar: React.FC<Props> = ({
   searchText = '',
   searchRef,
   landing = false,
+  clickFunc = () => void 0,
 }) => {
   return (
     <>
@@ -102,6 +104,11 @@ export const SearchBar: React.FC<Props> = ({
           className={styles.input}
           value={searchText}
           onChange={() => void 0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              clickFunc()
+            }
+          }}
         />
         {voice}
         <div className={styles.iconSpace} />

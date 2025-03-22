@@ -1,11 +1,8 @@
-export const images = [
-  '1GgWbP74phY',
-  'hzR9rDXWbqo',
-  'EAW7kDGHbws',
-  'cOkpTiJMGzA',
-  'gH9vt0v6EHY',
-  'y8Ngwq34_Ak',
-  'wMkaMXTJjlQ',
-  'smgTvepind4',
-  'k_T9Zj3SE8k',
-]
+export const image_dict = { 
+    "github": "/images/github.jpg",
+    "linkedin": "/images/linkedin.jpg",
+    "resume": "/images/resume.jpg",
+
+}
+
+export const images = Object.values(image_dict);

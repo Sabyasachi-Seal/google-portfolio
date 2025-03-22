@@ -9,18 +9,9 @@ export const Images: NextPage = () => {
     <div className={styles.container}>
       {images.map((id) => (
         <div className={styles.block} key={id}>
-          <a
-            href={`https://unsplash.com/photos/${id}`}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={`{id}`} target="_blank" rel="noreferrer">
             <div className={styles.image}>
-              <Image
-                src={`https://source.unsplash.com/${id}`}
-                alt="photography image"
-                fill
-                priority
-              />
+              <Image src={`${id}`} alt="photography image" fill priority />
             </div>
           </a>
         </div>

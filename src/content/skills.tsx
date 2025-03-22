@@ -7,10 +7,10 @@ const pad = (arr: number[]) =>
 
 export const skills = [
   {
-    symbol: 'TS',
-    name: 'TypeScript',
-    type: 'LANGUAGE',
-    category: 'FRONTEND',
+    symbol: 'DevOps',
+    name: 'Cloud',
+    type: 'FRAMEWORK',
+    category: 'DevOps',
     history: [0, 0, 8, 20, 34, 55, 58, 70, 85, 91, 89, 93, 95, 93],
   },
   {
@@ -21,15 +21,15 @@ export const skills = [
     history: [10, 20, 20, 35, 56, 57, 58, 72, 71, 70, 77, 78, 76, 74],
   },
   {
-    symbol: 'PY',
-    name: 'Python',
+    symbol: 'JAVA',
+    name: 'Java',
     type: 'LANGUAGE',
     category: 'BACKEND',
     history: [4, 8, 22, 35, 50, 48, 45, 50, 73, 71, 78, 64, 66, 68, 69],
   },
   {
-    symbol: 'JAVA',
-    name: 'Java',
+    symbol: 'PY',
+    name: 'Python',
     type: 'LANGUAGE',
     category: 'BACKEND',
     history: [0, 0, 32, 37, 42, 40, 38, 35, 50, 47, 44, 40, 37, 50],
@@ -40,13 +40,6 @@ export const skills = [
     type: 'FRAMEWORK',
     category: 'FRONTEND',
     history: [1, 10, 40, 37, 32, 55, 50, 80, 78, 73, 92, 91, 95, 96],
-  },
-  {
-    symbol: 'RN',
-    name: 'React Native',
-    type: 'FRAMEWORK',
-    category: 'MOBILE',
-    history: [0, 0, 0, 5, 32, 50, 67, 53, 52, 50, 48, 74, 70, 86],
   },
   {
     category: 'FRONTEND',
@@ -103,13 +96,6 @@ export const skills = [
     symbol: 'GQL',
     type: 'TOOL',
     history: [20, 31, 37, 42, 46, 52, 60, 62, 71, 72, 74, 75, 76, 82],
-  },
-  {
-    category: 'BACKEND',
-    name: 'Kotlin',
-    symbol: 'KT',
-    type: 'LANGUAGE',
-    history: [24, 39],
   },
   {
     category: 'BACKEND',

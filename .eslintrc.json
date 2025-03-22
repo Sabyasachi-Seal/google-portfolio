@@ -13,5 +13,11 @@
   },
   "globals": {
     "React": "writable"
-  }
+  },
+  "prettier/prettier": [
+    "error",
+    {
+      "endOfLine": "auto"
+    }
+  ]
 }

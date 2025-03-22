@@ -1,46 +1,40 @@
 import Image from 'next/image'
 import { ComponentProps } from 'react'
 import { SearchResult } from 'src/components'
+import { image_dict } from 'src/content/images'
 
 type Content = ComponentProps<typeof SearchResult>
 
 export const searchResults: Content[] = [
   {
-    title: 'San Antonio Regional Hospital | Web Design/Developer Intern',
+    title: 'Personal Github',
     description: (
       <>
-        On this week&apos;s episode of Grey&apos;s Antomy,I integrated
-        ADA-compliant features and implemented a web and mobile application for
-        patient education videos.
+        I contribute to open-source projects and create my own projects. I have
+        experience with Python, Machine Learning, Web Development, DevOps and
+        more.
       </>
     ),
-    extras: <b>Frontend, Backend, CMS</b>,
-    link: 'https://www.sarh.org/',
+    extras: <b>Projects, Tech Stack</b>,
+    link: 'https://github.com/Sabyasachi-Seal',
     image: (
-      <Image
-        src="https://sarhfiles.blob.core.windows.net/live/images/default-source/about-us/mission-bug417e9a01-44ef-4ef0-be45-36921e6e1338.jpg?sfvrsn=facaa391_3"
-        alt="San Antonio Regional Hospital logo"
-        priority
-        fill
-      />
+      <Image src={image_dict.github} alt="Sabyasachi Seal" priority fill />
     ),
   },
   {
-    title: 'Power Changes Lives | IT Web Design/Developer Intern',
+    title: 'Linkedin',
     description: (
       <>
-        I was promoted to Tech Lead and led two other interns in redesigning the
-        company site with React and Node.js. Additionally, I worked with
-        Shopify, Liquid, Python, Make automation, Microsoft SharePoint,
-        Microsoft Admin, and Ticketing Systems.
+        I always tend to update whatever I do on Linkedin. From projects to
+        certiciations, you can find everything here.
       </>
     ),
-    extras: <b>Frontend, Backend, Admin</b>,
-    link: 'https://www.powerchangeslives.com/',
+    extras: <b>Certifications, Experience</b>,
+    link: 'https://www.linkedin.com/in/sabyasachi-seal-4461711bb/',
     image: (
       <Image
-        src="https://www.powerchangeslives.com/images/POWERLOGO10292021.png"
-        alt="Power Changes Lives logo"
+        src={image_dict.linkedin}
+        alt="Sabyasachi Seal Linkedin"
         layout="fill"
         objectFit="contain"
         priority
@@ -48,26 +42,24 @@ export const searchResults: Content[] = [
     ),
   },
   {
-    title: "You're Wrong | Software Engineer",
+    title: 'Resume - Auto Updated',
     description: (
       <>
-        I founded and published You&apos;re Wrong on Product Hunt, gaining 78
-        followers and ranking #34 for the day. The project utilized React,
-        TypeScript, MongoDB, Mongoose, Clerk auth, Next.js, and Vercel to create
-        a responsive, secure, and efficient social network that provided an
-        excellent user experience.
+        This is my resume. Incase you need to quickly know about me, my
+        achivements and my experience, this is where you can find. if you want
+        to know more about me, you can always visit my linkedin profile.
       </>
     ),
     extras: (
       <>
-        <b>Deployment, Frontend, Backend</b>
+        <b>Resume, Portfolio</b>
       </>
     ),
-    link: 'https://www.producthunt.com/products/you-re-wrong#you-re-wrong',
+    link: 'https://resume.sabyasachiseal.com/',
     image: (
       <Image
-        src="https://ph-files.imgix.net/f22947fd-54dd-470c-9a38-b0afc9c875b3.png?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=72&h=72&fit=crop&bg=0fff&dpr=1"
-        alt="Product Hunt logo"
+        src={image_dict.resume}
+        alt="Sabyasachi Seal Resume"
         layout="fill"
         objectFit="contain"
         priority
@@ -75,78 +67,49 @@ export const searchResults: Content[] = [
     ),
   },
   {
-    title: 'Macabeats | Software Engineer',
+    title: 'Experience | Software Engineer',
     description: (
       <>
-        Fictional e-commerce store implemented using Next.js, Sanity, and Stripe
-        for processing payments.
+        I have experience in building web applications, RESTful APIs, and
+        automation scripts. I have worked with Python, JavaScript, React.js, and
+        DevOps. I have also worked with databases like MongoDB, PostgreSQL, and
+        MySQL.
       </>
     ),
     extras: (
       <>
-        <b> CMS, Frontend, Backend</b>
+        <b> AI/ML, Frontend, Backend</b>
       </>
     ),
-    link: 'https://macabeats.netlify.app/',
+    link: 'https://www.google.com/search?q=sabyasachi+seal',
   },
   {
-    title: 'Portfolio-Verse | Software Enigeer',
+    title: 'Blogs | Medium',
     description: (
       <>
-        I really enjoyed &quot;Across the Spider-Verse&quot; and was inspired to
-        become my own version of Spider-Man. I implemented vanilla HTML, CSS,
-        JavaScript, and Photoshop.
+        I write blogs on Medium about my projects, experiences, and new
+        technologies. I have written blogs on Python, JavaScript, and DevOps. If
+        you want to collaborate or have any queries, feel free to reach out to
+        me.
       </>
     ),
     extras: (
       <>
-        <b>Frontend, Photoshop</b>
+        <b>Technical Blogs</b>
       </>
     ),
-    link: 'https://github.com/AMACAFELLA/Portfolio-Verse',
+    link: 'https://medium.com/@yoboy907/',
   },
   {
-    title: 'Hire Me | Software Engineer',
+    title: 'Hire Me',
     description: (
       <>
-        I created this simple but cute website to help those who do not have a
-        portfolio website, using HTML, CSS, and JavaScript. This was inspired by
-        an Instagram reel.
+        I am open to new opportunities. If you have any projects or ideas, feel
+        free to reach out to me. I am available for freelance projects, open
+        source contributions, and full-time roles.
       </>
     ),
-    extras: <b>Frontend</b>,
-    link: 'https://github.com/AMACAFELLA/hire_me',
-  },
-  {
-    title: 'Desktop Cleaner | Software Engineer',
-    description: (
-      <>
-        Created a Python script using the Watchdog library that helps
-        automatically clean up your desktop by moving files into folders named
-        after their extensions in your Documents directory.
-      </>
-    ),
-    extras: (
-      <>
-        <b>Backend</b>
-      </>
-    ),
-    link: 'https://github.com/AMACAFELLA/desktop_cleaner',
-  },
-  {
-    title: 'Macdashboard | Software Engineer',
-    description: (
-      <>
-        Admin dashboard app using React.js and Syncfusion. This admin panel
-        includes one dashboard, three pages, four apps, and seven fully
-        functional charts!
-      </>
-    ),
-    extras: (
-      <>
-        <b>Frontend</b>
-      </>
-    ),
-    link: 'https://macadashboard.netlify.app/',
+    extras: <b>Contact</b>,
+    link: 'https://sabyasachiseal.com/#section-contacts',
   },
 ]
