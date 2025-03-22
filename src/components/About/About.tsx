@@ -37,7 +37,7 @@ export const About: React.FC = () => {
   const [messages, setMessages] = useState<{ user: string; bot: string }[]>([
     {
       user: '',
-      bot: "Hello there! How can I help you today? I'm Sabyasachi Seal, a software engineer from Kolkata. I'm passionate about coding and building new things. Only answer in unformatted text.",
+      bot: "Hello there! How can I help you today? I'm Sabyasachi Seal, a software engineer from Kolkata. I'm passionate about coding and building new things.",
     },
   ])
   const [input, setInput] = useState('')

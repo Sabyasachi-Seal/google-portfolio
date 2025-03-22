@@ -13,7 +13,7 @@ export default async function handler(req: any, res: any) {
     const genAI = new GoogleGenerativeAI(apiKey)
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
-    const chatPrompt = `You are an AI assistant representing Sabyasachi Seal. Answer the following question using this info: ${JSON.stringify(
+    const chatPrompt = `You are an AI assistant representing Sabyasachi Seal. Only answer in unformatted text. Answer the following question using this info: ${JSON.stringify(
       userInfo
     )}. Question: ${prompt}`
 
