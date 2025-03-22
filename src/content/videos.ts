@@ -1,42 +1,31 @@
 import { ComponentProps } from 'react';
 import { VideoResult } from 'src/components';
+import xml2js from 'xml2js';
 
 type Video = ComponentProps<typeof VideoResult>;
 const ufeedUrl = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLQC9gmr8t9R9tUE68IHZwpMeR8-DgqJkT';
+
 export async function fetchVideosFromXML(feedUrl: string = ufeedUrl): Promise<Video[]> {
   try {
-    const response = await fetch(feedUrl, {
-      mode: 'no-cors',
-    });
-    console.log('response:', response);
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+  const feedUrl = ufeedUrl;
+  const response = await fetch(proxyUrl + feedUrl);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     const xmlText = await response.text();
+    const parser = new xml2js.Parser({ explicitArray: false });
+    const data = await parser.parseStringPromise(xmlText);
 
-    // Parse the XML
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+    if (!data || !data.feed || !data.feed.entry) return [];
 
-    // Extract video data
-    const items = Array.from(xmlDoc.getElementsByTagName('item'));
-    const videos = items.map((item) => {
-      const title = item.getElementsByTagName('title')[0]?.textContent || '';
-      const id = item.getElementsByTagName('guid')[0]?.textContent || '';
-      const description =
-        item.getElementsByTagName('description')[0]?.textContent || '';
-      const uploadDate =
-        item.getElementsByTagName('pubDate')[0]?.textContent || '';
-
-      return {
-        title,
-        id,
-        description,
-        uploadDate,
-      } as Video;
-    });
-
-    return videos;
+    return data.feed.entry.map((entry: any) => ({
+      title: entry.title,
+      id: entry["yt:videoId"],
+      description: entry["media:group"]["media:description"] || '',
+      uploadDate: entry.published,
+    })) as Video[];
   } catch (error) {
     console.error('Failed to fetch videos:', error);
     return [];
