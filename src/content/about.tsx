@@ -1,12 +1,8 @@
 import { ComponentProps } from 'react'
 import { Friend, SocialProfile } from 'src/components'
 import {
-  elon,
-  orion,
   github,
   instagram,
-  mark,
-  pat,
   linkedin,
   twitter,
   youtube,
@@ -35,7 +31,7 @@ export const profiles: Profile[] = [
   },
   {
     label: 'Instagram',
-    url: 'https://www.instagram.com/sabyasachi_seal/',
+    url: 'https://www.instagram.com/sealmydeal_/',
     src: instagram,
   },
 ]
@@ -47,7 +43,7 @@ export const friends: Friends = [
     src: medium,
     name: 'Blogs',
     label: 'A collection of my thoughts',
-    url: 'https://social.sabyasachiseal.com/medium',
+    url: 'https://medium.com/@yoboy907/',
   },
   {
     src: youtube,
