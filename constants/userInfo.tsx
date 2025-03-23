@@ -1,6 +1,6 @@
 export const userInfo = {
   name: 'Sabyasachi Seal',
-  profession: 'Indian software engineer, web author, and businessman',
+  profession: 'software engineer, web author, and businessman',
   location: 'Kolkata, West Bengal',
   communities: ['MLSA', 'GDSC', 'AWS Community Builders'],
   github: null,

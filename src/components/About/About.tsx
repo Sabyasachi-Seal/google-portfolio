@@ -149,7 +149,7 @@ export const About: React.FC = () => {
           </div>
           <div className={styles.descriptionWrapper}>
             <p className={styles.description}>
-              Sabyasachi Seal is a Indian software engineer, web author, and
+              Sabyasachi Seal is a software engineer, web author, and
               businessman. He is currently located in{' '}
               <b>Kolkata, West Bengal,</b> , He is a avid coder and loves to
               build new things. He is a part of multiple commnuties like MLSA,

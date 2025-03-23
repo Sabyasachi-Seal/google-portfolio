@@ -32,7 +32,7 @@ export const Home: NextPage = () => {
           </div>
           <div className={styles.name}>
             <h2>Sabyasachi Seal{about}</h2>
-            <p>Indian Software Engineer {about}</p>
+            <p>Software Engineer {about}</p>
           </div>
         </div>
         <div className={styles.divider} />
