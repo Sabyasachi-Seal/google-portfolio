@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { friends, profiles } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
+import { userInfo } from 'constants/userInfo'
+import { resolve } from 'path'
 
 const globe = (
   <svg
@@ -13,23 +15,6 @@ const globe = (
     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"></path>
   </svg>
 )
-
-const userInfo = {
-  name: 'Sabyasachi Seal',
-  profession: 'Indian software engineer, web author, and businessman',
-  location: 'Kolkata, West Bengal',
-  interests: 'avid coder, loves to build new things',
-  communities: ['MLSA', 'GDSC', 'AWS Community Builders'],
-  github: 'known for projects',
-  medium: 'occasionally posts blogs',
-  experience: '1 year in software engineering',
-  born: 'June 2002',
-  age: new Date(Date.now() - new Date(2002, 5).getTime()).getFullYear() - 1970,
-  education: 'Techno Main Salt Lake (2024)',
-  skills: ['Python', 'DevOps', 'Cloud'],
-  linkedin: 'https://www.linkedin.com/in/sabyasachi-seal-4461711bb/',
-  website: 'http://sabyasachiseal.com',
-}
 
 export const About: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -68,10 +53,12 @@ export const About: React.FC = () => {
     setIsTyping(true)
 
     try {
-      const response = await fetch('/api/callGeminiApi', {
+      const resolvedUserInfo = await userInfo
+
+      const response = await fetch('/api/callGeminiApii', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, userInfo }),
+        body: JSON.stringify({ prompt: input, userInfo: resolvedUserInfo }),
       })
 
       if (!response.ok) {
@@ -81,7 +68,6 @@ export const About: React.FC = () => {
       const data = await response.json()
       const botResponse = data.response || 'Sorry, something went wrong.'
 
-      // Simulate typing effect
       let currentText = ''
       for (const char of botResponse) {
         await new Promise((resolve) => setTimeout(resolve, 30)) // 30ms per character
