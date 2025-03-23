@@ -82,6 +82,9 @@
   transition: all 0.5s ease;
   opacity: 0;
   transform: translateY(20px);
+  @include themed-styles {
+    scrollbar-color: themed-color(background) themed-color(footer-border);
+  }
 }
 
 .chat.slideIn {
@@ -109,6 +112,9 @@
   overflow-y: auto;
   border-radius: 12px;
   background: white;
+  @include themed-styles {
+    background-color: themed-color(background);
+  }
 }
 
 .userMessage,
@@ -133,12 +139,19 @@
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   max-width: 80%;
+  @include themed-styles {
+    background-color: themed-color(background);
+    color: themed-color(text-high-contrast);
+  }
 }
 
 .inputArea {
   display: flex;
   padding: 10px;
   background: #fff;
+  @include themed-styles {
+    background-color: themed-color(background);
+  }
 }
 
 .inputArea input {
@@ -148,6 +161,11 @@
   border-radius: 20px;
   margin-right: 10px;
   font-size: 12px;
+  margin-top: 10px;
+  @include themed-styles {
+    background-color: themed-color(background-contrast);
+    color: themed-color(text-high-contrast);
+  }
 }
 
 .inputArea button {
@@ -159,6 +177,7 @@
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease;
+  margin-top: 10px;
 }
 
 .inputArea button:hover {
