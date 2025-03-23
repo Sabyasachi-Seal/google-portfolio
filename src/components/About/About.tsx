@@ -25,7 +25,7 @@ export const About: React.FC = () => {
     },
   ])
   const [input, setInput] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
+  // Removed unused isTyping state
   const [githubData, setGithubData] = useState<any>(null)
   const [mediumData, setMediumData] = useState<any>(null)
 
@@ -98,13 +98,13 @@ export const About: React.FC = () => {
     const updatedMessages = [...messages, { user: input, bot: 'Thinking...' }]
     setMessages(updatedMessages)
     setInput('')
-    setIsTyping(true)
+    // Removed isTyping update
 
     userInfo.github = githubData
     userInfo.medium = mediumData
 
     try {
-      const response = await fetch('/api/callGeminiApii', {
+      const response = await fetch('/api/callGeminiApi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: input, userInfo: userInfo }),
@@ -128,9 +128,8 @@ export const About: React.FC = () => {
       updatedMessages[updatedMessages.length - 1].bot =
         'Sorry, something went wrong.'
       setMessages([...updatedMessages])
-    } finally {
-      setIsTyping(false)
     }
+    // Removed isTyping update
   }
 
   return (
@@ -185,13 +184,12 @@ export const About: React.FC = () => {
             (2024)
           </div>
           <div className={styles.stat}>
-            <span>Skilled In: </span>Python, DevOps, Cloud (2024)
+            <span>Skilled In: </span>Python, DevOps, Cloud (2024){' '}
             <a
               href="https://www.linkedin.com/in/sabyasachi-seal-4461711bb/"
               target="_blank"
               rel="noreferrer"
             >
-              {' '}
               Linkedin
             </a>
           </div>
@@ -200,7 +198,7 @@ export const About: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Ask me anything about Sabyasachi..."
             />
             <button onClick={handleSendMessage}>Send</button>
@@ -210,8 +208,8 @@ export const About: React.FC = () => {
       ) : (
         <div className={`${styles.chat} ${styles.slideIn}`}>
           <div className={styles.chatWindow} ref={chatWindowRef}>
-            {messages.map((msg, index) => (
-              <div key={index}>
+            {messages.map((msg) => (
+              <div key={`${msg.user}-${msg.bot}`}>
                 {msg.user && (
                   <div className={styles.userMessage}>
                     <strong>You:</strong> {msg.user}
@@ -228,7 +226,7 @@ export const About: React.FC = () => {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Ask me anything about Sabyasachi..."
             />
             <button onClick={handleSendMessage}>Send</button>

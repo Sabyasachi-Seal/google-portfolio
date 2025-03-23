@@ -1,7 +1,5 @@
 import classNames from 'classnames'
 import styles from './LandingFooter.module.scss'
-import { codesymbol } from '../../content/b64'
-import Image from 'next/image'
 
 export const LandingFooter: React.FC = () => {
   return (
@@ -33,7 +31,7 @@ export const LandingFooter: React.FC = () => {
         <div className={styles.content}>
           <a
             className={styles.carbon}
-            href="http://social.sabyasachiseal.com/linkedin"
+            href="https://www.linkedin.com/in/sabyasachi-seal-4461711bb/"
             rel="noopener noreferrer"
           >
             Coding since 2007
@@ -41,21 +39,15 @@ export const LandingFooter: React.FC = () => {
         </div>
         <div className={styles.content}>
           <a
-            href="http://social.sabyasachiseal.com/github"
+            href="https://github.com/Sabyasachi-Seal/"
             rel="noopener noreferrer"
           >
             Github
           </a>
-          <a
-            href="https://social.sabyasachiseal.com/medium"
-            rel="noopener noreferrer"
-          >
+          <a href="https://medium.com/@yoboy907/" rel="noopener noreferrer">
             Blogs
           </a>
-          <a
-            href="https://portfolio.sabyasachiseal.com"
-            rel="noopener noreferrer"
-          >
+          <a href="https://sabyasachiseal.com" rel="noopener noreferrer">
             Other Wesbite
           </a>
         </div>
