@@ -3,7 +3,6 @@ import { friends, profiles } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
 import { userInfo } from 'constants/userInfo'
-import { resolve } from 'path'
 
 const globe = (
   <svg
@@ -27,6 +26,9 @@ export const About: React.FC = () => {
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [githubData, setGithubData] = useState<any>(null)
+  const [mediumData, setMediumData] = useState<any>(null)
+
   const chatWindowRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -37,6 +39,52 @@ export const About: React.FC = () => {
       })
     }
   }, [messages])
+
+  useEffect(() => {
+    const fetchGithubData = async () => {
+      try {
+        const response = await fetch('/api/getGithubData', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch GitHub data')
+        }
+
+        const data = await response.json()
+        setGithubData(data)
+        userInfo.github = githubData
+      } catch (error) {
+        console.error('Error fetching GitHub data:', error)
+      }
+    }
+
+    fetchGithubData()
+  }, [])
+
+  useEffect(() => {
+    const fetchMediumData = async () => {
+      try {
+        const response = await fetch('/api/getMediumData', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch Medium data')
+        }
+
+        const data = await response.json()
+        setMediumData(data)
+        userInfo.medium = mediumData
+      } catch (error) {
+        console.error('Error fetching Medium data:', error)
+      }
+    }
+
+    fetchMediumData()
+  }, [])
 
   const handleSendMessage = async () => {
     if (!input.trim()) return
@@ -52,13 +100,14 @@ export const About: React.FC = () => {
     setInput('')
     setIsTyping(true)
 
-    try {
-      const resolvedUserInfo = await userInfo
+    userInfo.github = githubData
+    userInfo.medium = mediumData
 
+    try {
       const response = await fetch('/api/callGeminiApii', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, userInfo: resolvedUserInfo }),
+        body: JSON.stringify({ prompt: input, userInfo: userInfo }),
       })
 
       if (!response.ok) {
