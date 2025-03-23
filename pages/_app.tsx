@@ -37,6 +37,10 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
           name="description"
           content="Personal website of Sabyasachi Seal themed after google search"
         />
+        <meta
+          name="google-site-verification"
+          content="jTRTtqSEQc13By4SUDwI-AMNG7LzDbbevmZjJSxFATM"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="root">
