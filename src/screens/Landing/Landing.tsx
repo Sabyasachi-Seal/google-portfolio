@@ -1,4 +1,4 @@
-import { LegacyRef, useRef, useCallback } from 'react'
+import { LegacyRef, useRef, useCallback, useState, useEffect } from 'react'
 import {
   LandingHeader,
   Logo,
@@ -16,17 +16,47 @@ interface LandingProps {
   onSearchClick: VoidFunction
 }
 
-const emptyFunc = () => {}
-
 export const Landing: React.FC<LandingProps> = ({
   searchText,
   searchRef,
   onSearchClick,
 }: LandingProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const [buttonText, setButtonText] = useState('How can I help you ?')
 
   const redirectToLucky = useCallback(() => {
     window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  }, [])
+
+  useEffect(() => {
+    const texts = [
+      'How can I help you ?',
+      'Click here or Press ENTER',
+      'What are you waiting for?',
+    ]
+    let currentIndex = 0
+    let currentText = ''
+    let index = 0
+
+    const typeEffect = () => {
+      if (index < texts[currentIndex].length) {
+        currentText += texts[currentIndex][index]
+        setButtonText(currentText)
+        index++
+        setTimeout(typeEffect, 100) // Add a delay of 100ms between each character
+      } else {
+        setTimeout(() => {
+          currentIndex = (currentIndex + 1) % texts.length // Switch to the next text
+          currentText = ''
+          index = 0
+          typeEffect() // Start typing the next text
+        }, 5000) // Wait 5 seconds before switching
+      }
+    }
+
+    typeEffect() // Start the typing effect
+
+    return () => {} // No cleanup needed for this implementation
   }, [])
 
   return (
@@ -44,7 +74,7 @@ export const Landing: React.FC<LandingProps> = ({
         />
         <div className={styles.buttons}>
           <LandingButton onClick={onSearchClick} buttonRef={buttonRef}>
-            How can I help you ?
+            {buttonText}
           </LandingButton>
           <LandingButton onClick={redirectToLucky}>
             I&apos;m Feeling Lucky

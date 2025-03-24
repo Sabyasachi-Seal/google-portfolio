@@ -5,12 +5,12 @@ export const searchTextGeneratorBuilder = (
   return function* () {
     for (const misspelling of misspellings) {
       let current = ''
-      for (let i = 0; i < misspelling.length; i++) {
-        current += misspelling[i]
+      for (const char of misspelling) {
+        current += char
         yield [current, 20]
       }
       yield [null, 900]
-      for (let i = 0; i < misspelling.length; i++) {
+      for (const _ of misspelling) {
         current = current.slice(0, -1)
         yield [current, 10]
       }
