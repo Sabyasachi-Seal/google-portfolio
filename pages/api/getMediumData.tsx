@@ -40,15 +40,14 @@ export default async function handler(req: any, res: any) {
       const link = item.link?.[0] || ''
       const pubDate = item.pubDate?.[0] || ''
       const description = item.description?.[0] || 'No description'
-
-      const cleanDescription =
-        description.replace(/<[^>]+>/g, '').slice(0, 200) + '...'
+      const content = item['content:encoded']?.[0] || ''
 
       return {
         title,
         link,
         pubDate,
-        description: cleanDescription,
+        description: description,
+        thumbnail: content.match(/src="([^"]+)"/)?.[1] || '',
       }
     })
 
