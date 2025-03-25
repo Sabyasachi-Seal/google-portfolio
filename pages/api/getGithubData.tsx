@@ -13,7 +13,14 @@ export default async function handler(req: any, res: any) {
     location: '',
     email: '',
     blog: '',
-    repositories: [],
+    repositories: [
+      {
+        name: '',
+        description: '',
+        stars: 0,
+        forks: 0,
+      },
+    ],
   }
 
   try {
@@ -93,7 +100,7 @@ export default async function handler(req: any, res: any) {
       location: githubData.location ?? 'Not provided',
       email: githubData.email ?? 'Not provided',
       blog: githubData.blog ?? 'Not provided',
-      repositories: detailedRepos,
+      repositories: detailedRepos ?? [],
     }
   } catch (error) {
     console.error('Error fetching GitHub data:', error)
