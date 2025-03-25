@@ -38,11 +38,17 @@ const routes = [
     activeIcon: videoActive,
   },
   {
-    label: 'Images',
-    route: '/images',
-    icon: image,
-    activeIcon: imageActive,
+    label: 'Blogs',
+    route: '/blogs',
+    icon: book,
+    activeIcon: bookActive,
   },
+  // {
+  //   label: 'Images',
+  //   route: '/images',
+  //   icon: image,
+  //   activeIcon: imageActive,
+  // },
   {
     label: 'Skills',
     route: '/skills',

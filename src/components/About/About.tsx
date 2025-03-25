@@ -65,22 +65,20 @@ export const About: React.FC = () => {
 
   useEffect(() => {
     const fetchMediumData = async () => {
-      try {
-        const response = await fetch('/api/getMediumData', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch Medium data')
-        }
-
-        const data = await response.json()
-        setMediumData(data)
-        userInfo.medium = mediumData
-      } catch (error) {
-        console.error('Error fetching Medium data:', error)
-      }
+      // try {
+      //   const response = await fetch('/api/getMediumData', {
+      //     method: 'GET',
+      //     headers: { 'Content-Type': 'application/json' },
+      //   })
+      //   if (!response.ok) {
+      //     throw new Error('Failed to fetch Medium data')
+      //   }
+      //   const data = await response.json()
+      //   setMediumData(data)
+      //   userInfo.medium = mediumData
+      // } catch (error) {
+      //   console.error('Error fetching Medium data:', error)
+      // }
     }
 
     fetchMediumData()
