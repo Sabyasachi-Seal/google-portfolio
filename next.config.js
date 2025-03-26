@@ -21,7 +21,7 @@ const nextConfig = {
       'img.freepik.com',
       'github.githubassets.com',
       'github.githubassets.com',
-      'cdn.medium.com',
+      '*.medium.com',
       '*',
     ],
     minimumCacheTTL: 86400,
