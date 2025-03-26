@@ -1,8 +1,21 @@
 import { parseStringPromise } from 'xml2js'
 
+const cache = new Map<string, { data: any; expiry: number }>()
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  const CACHE_KEY = 'mediumInfo'
+  const CACHE_TTL = 60 * 60 * 1000 // Cache for 1 hour
+
+  // Check if data is in cache and not expired
+  if (cache.has(CACHE_KEY)) {
+    const cachedData = cache.get(CACHE_KEY)
+    if (cachedData && cachedData.expiry > Date.now()) {
+      return res.status(200).json({ mediumInfo: cachedData.data })
+    }
   }
 
   let mediumInfo: {
@@ -12,11 +25,13 @@ export default async function handler(req: any, res: any) {
       link: string
       pubDate: string
       description: string
+      thumbnail: string
     }[]
   } = {
     username: '',
     recentPosts: [],
   }
+
   try {
     const mediumUrl = 'https://medium.com/feed/@yoboy907'
     const mediumResponse = await fetch(mediumUrl)
@@ -55,8 +70,13 @@ export default async function handler(req: any, res: any) {
       username: mediumUsername,
       recentPosts: recentPosts,
     }
-  } catch (E) {
-    console.error('Error fetching Medium data:', E)
+
+    // Store the result in the cache
+    cache.set(CACHE_KEY, { data: mediumInfo, expiry: Date.now() + CACHE_TTL })
+  } catch (error) {
+    console.error('Error fetching Medium data:', error)
+    return res.status(500).json({ error: 'Failed to fetch Medium data' })
   }
+
   res.status(200).json({ mediumInfo })
 }

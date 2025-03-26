@@ -1,41 +1,82 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import xml2js from 'xml2js'
+import { parseStringPromise } from 'xml2js'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    const { playlistId } = req.query
-    if (!playlistId || typeof playlistId !== 'string') {
-      return res.status(400).json({ error: 'Missing or invalid playlist ID' })
-    }
+const cache = new Map<string, { data: any; expiry: number }>()
 
-    const feedUrl = `https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`
-    const response = await fetch(feedUrl)
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
-
-    const xmlText = await response.text()
-    const parser = new xml2js.Parser({ explicitArray: false })
-    const data = await parser.parseStringPromise(xmlText)
-
-    if (!data || !data.feed || !data.feed.entry) {
-      return res.status(404).json({ error: 'No videos found' })
-    }
-
-    const videos = data.feed.entry.map((entry: any) => ({
-      title: entry.title,
-      id: entry['yt:videoId'],
-      description: entry['media:group']['media:description'] || '',
-      uploadDate: entry.published,
-    }))
-
-    res.status(200).json(videos)
-  } catch (error) {
-    console.error('Failed to fetch videos:', error)
-    res.status(500).json({ error: 'Failed to fetch videos' })
+export default async function handler(req: any, res: any) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' })
   }
+
+  const CACHE_KEY = 'mediumInfo'
+  const CACHE_TTL = 60 * 60 * 1000 // Cache for 1 hour
+
+  // Check if data is in cache and not expired
+  if (cache.has(CACHE_KEY)) {
+    const cachedData = cache.get(CACHE_KEY)
+    if (cachedData && cachedData.expiry > Date.now()) {
+      return res.status(200).json({ mediumInfo: cachedData.data })
+    }
+  }
+
+  let mediumInfo: {
+    username: string
+    recentPosts: {
+      title: string
+      link: string
+      pubDate: string
+      description: string
+      thumbnail: string
+    }[]
+  } = {
+    username: '',
+    recentPosts: [],
+  }
+
+  try {
+    const mediumUrl = 'https://medium.com/feed/@yoboy907'
+    const mediumResponse = await fetch(mediumUrl)
+
+    if (!mediumResponse.ok) {
+      throw new Error(
+        `Failed to fetch Medium feed: ${mediumResponse.status} ${mediumResponse.statusText}`
+      )
+    }
+
+    const mediumXmlText = await mediumResponse.text()
+
+    const xmlData = await parseStringPromise(mediumXmlText)
+
+    const mediumUsername =
+      /medium\.com\/feed\/@([a-zA-Z0-9-]+)/.exec(mediumUrl)?.[1] ?? ''
+
+    const items = xmlData.rss?.channel?.[0]?.item || []
+    const recentPosts = items.slice(0, 5).map((item: any) => {
+      const title = item.title?.[0] || 'No title'
+      const link = item.link?.[0] || ''
+      const pubDate = item.pubDate?.[0] || ''
+      const description = item.description?.[0] || 'No description'
+      const content = item['content:encoded']?.[0] || ''
+
+      return {
+        title,
+        link,
+        pubDate,
+        description: description,
+        thumbnail: content.match(/src="([^"]+)"/)?.[1] || '',
+      }
+    })
+
+    mediumInfo = {
+      username: mediumUsername,
+      recentPosts: recentPosts,
+    }
+
+    // Store the result in the cache
+    cache.set(CACHE_KEY, { data: mediumInfo, expiry: Date.now() + CACHE_TTL })
+  } catch (error) {
+    console.error('Error fetching Medium data:', error)
+    return res.status(500).json({ error: 'Failed to fetch Medium data' })
+  }
+
+  res.status(200).json({ mediumInfo })
 }

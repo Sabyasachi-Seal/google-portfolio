@@ -1,6 +1,18 @@
+const cache = new Map<string, { data: any; expiry: number }>()
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
+  }
+
+  const CACHE_KEY = 'githubInfo'
+  const CACHE_TTL = 60 * 60 * 1000
+
+  if (cache.has(CACHE_KEY)) {
+    const cachedData = cache.get(CACHE_KEY)
+    if (cachedData && cachedData.expiry > Date.now()) {
+      return res.status(200).json({ githubInfo: cachedData.data })
+    }
   }
 
   let githubInfo = {
@@ -122,6 +134,8 @@ export default async function handler(req: any, res: any) {
       blog: githubData.blog ?? 'Not provided',
       repositories: uniqueTopRepos ?? [],
     }
+
+    cache.set(CACHE_KEY, { data: githubInfo, expiry: Date.now() + CACHE_TTL })
   } catch (error) {
     console.error('Error fetching GitHub data:', error)
     return res.status(500).json({ error: 'Failed to fetch GitHub data' })
