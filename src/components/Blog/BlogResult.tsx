@@ -27,7 +27,11 @@ export const BlogResult: React.FC<Props> = ({
       </a>
       <div className={styles.content}>
         <div className={styles.thumbnail}>
-          <Image src={thumbnail} alt={title} fill />
+          <img
+            src={thumbnail}
+            alt={title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </div>
         <div className={styles.description}>
           <h4 className={styles.mobile}>{title}</h4>
