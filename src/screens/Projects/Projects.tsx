@@ -40,7 +40,7 @@ export const Projects: NextPage = () => {
             key={project.link}
             name={project.name || 'Untitled'}
             description={project.description || 'No description available'}
-            link={project.link || '#'}
+            link={`https://github.com/Sabyasachi-Seal/${project.name}`}
           />
         ))}
       </div>
