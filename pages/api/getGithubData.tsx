@@ -113,14 +113,8 @@ export default async function handler(req: any, res: any) {
       new Map([...topByTime, ...topByForks].map((repo) => [repo.name, repo]))
     ).map(([, repo]) => repo)
 
-    // sort uniqueTopRepos by stars+forks, then by upload date
-    uniqueTopRepos.sort(
-      (a, b) =>
-        (b.stars + b.forks) * 1000 -
-        (a.stars + a.forks) * 1000 +
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
-    )
+    // sort uniqueTopRepos by stars+forks
+    uniqueTopRepos.sort((a, b) => b.stars + b.forks - (a.stars + a.forks))
 
     githubInfo = {
       username: githubData.login ?? '',

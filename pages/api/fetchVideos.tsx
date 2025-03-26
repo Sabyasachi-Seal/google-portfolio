@@ -33,7 +33,7 @@ export default async function handler(
     const parser = new xml2js.Parser({ explicitArray: false })
     const data = await parser.parseStringPromise(xmlText)
 
-    if (!data || !data.feed || !data.feed.entry) {
+    if (!data?.feed?.entry) {
       return res.status(404).json({ error: 'No videos found' })
     }
 

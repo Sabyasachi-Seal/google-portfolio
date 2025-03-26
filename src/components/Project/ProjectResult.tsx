@@ -18,23 +18,24 @@ export const ProjectResult: React.FC<Props> = ({
   link,
 }: Props) => {
   return (
-    <div className={styles.container}>
-      <a href={link} target="_blank" rel="noreferrer">
+    <a href={link} target="_blank" rel="noreferrer">
+      <div className={styles.container}>
         <div className={styles.link}>
           <h3 className={styles.title}>{name}</h3>
         </div>
-      </a>
-      <div className={styles.content}>
-        <div className={styles.description}>
-          <p className={styles.text}>
-            {description || 'No description available'}
-          </p>
-          <p className={styles.stats}>
-            <span>⭐ {stars}</span> · <span>🍴 {forks}</span> ·{' '}
-            <span>💻 {language}</span>
-          </p>
+
+        <div className={styles.content}>
+          <div className={styles.description}>
+            <p className={styles.text}>
+              {description || 'No description available'}
+            </p>
+            <p className={styles.stats}>
+              <span>⭐ {stars}</span> · <span>🍴 {forks}</span> ·{' '}
+              <span>💻 {language}</span>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   )
 }
