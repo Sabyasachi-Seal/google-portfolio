@@ -24,13 +24,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const githubUrl = 'https://github.com/Sabyasachi-Seal'
-    const usernameRegex = /github\.com\/([a-zA-Z0-9-]+)/
-    const usernameMatch = usernameRegex.exec(githubUrl)
-    if (!usernameMatch) {
-      throw new Error('Invalid GitHub URL')
-    }
-    const username = usernameMatch[1]
+    const username = 'Sabyasachi-Seal'
 
     // Fetch user data
     const githubResponse = await fetch(
@@ -90,6 +84,23 @@ export default async function handler(req: any, res: any) {
       updatedAt: repo.updated_at ?? '',
     }))
 
+    const max_repos = parseInt(process.env.MAX_REPOS ?? '20', 10) / 2
+
+    const topByTime = [...detailedRepos]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .slice(0, max_repos)
+
+    const topByForks = [...detailedRepos]
+      .sort((a, b) => b.forks - a.forks)
+      .slice(0, max_repos)
+
+    const uniqueTopRepos = Array.from(
+      new Map([...topByTime, ...topByForks].map((repo) => [repo.name, repo]))
+    ).map(([, repo]) => repo)
+
     githubInfo = {
       username: githubData.login ?? '',
       name: githubData.name ?? 'Not provided',
@@ -100,7 +111,7 @@ export default async function handler(req: any, res: any) {
       location: githubData.location ?? 'Not provided',
       email: githubData.email ?? 'Not provided',
       blog: githubData.blog ?? 'Not provided',
-      repositories: detailedRepos ?? [],
+      repositories: uniqueTopRepos ?? [],
     }
   } catch (error) {
     console.error('Error fetching GitHub data:', error)

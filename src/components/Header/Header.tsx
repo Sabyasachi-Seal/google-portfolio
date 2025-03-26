@@ -38,7 +38,7 @@ const routes = [
     activeIcon: videoActive,
   },
   {
-    label: 'Blogs',
+    label: 'Recent Blogs',
     route: '/blogs',
     icon: book,
     activeIcon: bookActive,
