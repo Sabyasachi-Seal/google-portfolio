@@ -42,6 +42,7 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
           content="jTRTtqSEQc13By4SUDwI-AMNG7LzDbbevmZjJSxFATM"
         />
         <link rel="icon" href="/favicon.ico" />
+        <meta name="referrer" content="no-referrer" />
       </Head>
       <div className="root">
         {landing ? (
