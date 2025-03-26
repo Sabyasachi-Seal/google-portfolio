@@ -22,6 +22,7 @@ const nextConfig = {
       'github.githubassets.com',
       'github.githubassets.com',
       '*.medium.com',
+      'cdn-images-1.medium.com',
       '*',
     ],
     minimumCacheTTL: 86400,
