@@ -15,6 +15,7 @@
     "@nivo/line": "^0.79.1",
     "classnames": "^2.3.1",
     "next": "13.0.2",
+    "node-cache": "^5.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sass": "^1.54.0",

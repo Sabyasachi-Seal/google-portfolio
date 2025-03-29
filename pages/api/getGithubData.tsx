@@ -1,28 +1,19 @@
-import fs from 'fs'
-import path from 'path'
+import NodeCache from 'node-cache'
 
-const CACHE_DIR = path.resolve('./cache')
-const CACHE_FILE = path.join(CACHE_DIR, 'githubInfo.json')
-const CACHE_TTL = 60 * 60 * 1000 // Cache TTL in milliseconds (1 hour)
-
-// Ensure the cache directory exists
-if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR)
-}
+const CACHE_TTL = 60 * 60 // Cache TTL in seconds (1 hour)
+const cache = new NodeCache({ stdTTL: CACHE_TTL }) // Initialize in-memory cache
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  // Check if cache exists and is valid
-  if (fs.existsSync(CACHE_FILE)) {
-    const stats = fs.statSync(CACHE_FILE)
-    const now = Date.now()
-    if (now - stats.mtimeMs < CACHE_TTL) {
-      const cachedData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'))
-      return res.status(200).json({ githubInfo: cachedData })
-    }
+  const cacheKey = 'githubInfo'
+
+  // Check if data exists in the cache
+  const cachedData = cache.get(cacheKey)
+  if (cachedData) {
+    return res.status(200).json({ githubInfo: cachedData })
   }
 
   interface Repository {
@@ -153,7 +144,8 @@ export default async function handler(req: any, res: any) {
       repositories: uniqueTopRepos ?? [],
     }
 
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(githubInfo), 'utf-8')
+    // Store data in the in-memory cache
+    cache.set(cacheKey, githubInfo)
   } catch (error) {
     console.error('Error fetching GitHub data:', error)
     return res.status(500).json({ error: 'Failed to fetch GitHub data' })
