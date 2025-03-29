@@ -1,29 +1,23 @@
 import { parseStringPromise } from 'xml2js'
-import fs from 'fs'
-import path from 'path'
+import NodeCache from 'node-cache'
 
-const CACHE_DIR = path.resolve('./cache')
-const CACHE_FILE = path.join(CACHE_DIR, 'mediumInfo.json')
-const CACHE_TTL = 60 * 60 * 1000 // Cache for 1 hour
+// Initialize cache with 1 hour TTL
+const cache = new NodeCache({
+  stdTTL: 60 * 60, // 1 hour in seconds
+  checkperiod: 120, // Check for expired items every 2 minutes
+})
 
-// Ensure the cache directory exists
-if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR)
-}
+const CACHE_KEY = 'mediumInfo'
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  // Check if cache exists and is valid
-  if (fs.existsSync(CACHE_FILE)) {
-    const stats = fs.statSync(CACHE_FILE)
-    const now = Date.now()
-    if (now - stats.mtimeMs < CACHE_TTL) {
-      const cachedData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'))
-      return res.status(200).json({ mediumInfo: cachedData })
-    }
+  // Check cache first
+  const cachedData = cache.get(CACHE_KEY)
+  if (cachedData) {
+    return res.status(200).json({ mediumInfo: cachedData })
   }
 
   let mediumInfo: {
@@ -51,7 +45,6 @@ export default async function handler(req: any, res: any) {
     }
 
     const mediumXmlText = await mediumResponse.text()
-
     const xmlData = await parseStringPromise(mediumXmlText)
 
     const mediumUsername =
@@ -79,8 +72,8 @@ export default async function handler(req: any, res: any) {
       recentPosts: recentPosts,
     }
 
-    // Store the result in the cache file
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(mediumInfo), 'utf-8')
+    // Store in cache
+    cache.set(CACHE_KEY, mediumInfo)
   } catch (error) {
     console.error('Error fetching Medium data:', error)
     return res.status(500).json({ error: 'Failed to fetch Medium data' })

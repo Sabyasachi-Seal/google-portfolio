@@ -1,16 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import xml2js from 'xml2js'
-import fs from 'fs'
-import path from 'path'
+import NodeCache from 'node-cache'
 
-// Cache directory
-const CACHE_DIR = path.resolve('./cache')
-const CACHE_TTL = 60 * 60 * 1000 // Cache TTL in milliseconds (5 minutes)
-
-// Ensure the cache directory exists
-if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR)
-}
+// Initialize cache with 1 hour TTL
+const cache = new NodeCache({
+  stdTTL: 60 * 60, // 1 hour in seconds
+  checkperiod: 120, // Check for expired items every 2 minutes
+})
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,17 +18,13 @@ export default async function handler(
       return res.status(400).json({ error: 'Missing or invalid playlist ID' })
     }
 
-    // Cache file path
-    const cacheFilePath = path.join(CACHE_DIR, `playlist_${playlistId}.json`)
+    // Cache key for this specific playlist
+    const cacheKey = `playlist_${playlistId}`
 
-    // Check if cache exists and is valid
-    if (fs.existsSync(cacheFilePath)) {
-      const stats = fs.statSync(cacheFilePath)
-      const now = Date.now()
-      if (now - stats.mtimeMs < CACHE_TTL) {
-        const cachedData = JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8'))
-        return res.status(200).json(cachedData)
-      }
+    // Check if data is in cache
+    const cachedData = cache.get(cacheKey)
+    if (cachedData) {
+      return res.status(200).json(cachedData)
     }
 
     // Fetch data from YouTube
@@ -58,8 +50,8 @@ export default async function handler(
       uploadDate: entry.published,
     }))
 
-    // Store data in cache file
-    fs.writeFileSync(cacheFilePath, JSON.stringify(videos), 'utf-8')
+    // Store data in cache
+    cache.set(cacheKey, videos)
 
     res.status(200).json(videos)
   } catch (error) {
