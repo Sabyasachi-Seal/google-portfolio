@@ -53,6 +53,7 @@ export default async function handler(
     // Store data in cache
     cache.set(cacheKey, videos)
 
+    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
     res.status(200).json(videos)
   } catch (error) {
     console.error('Failed to fetch videos:', error)

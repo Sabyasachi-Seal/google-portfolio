@@ -79,5 +79,6 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: 'Failed to fetch Medium data' })
   }
 
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
   res.status(200).json({ mediumInfo })
 }
