@@ -1,19 +1,6 @@
-import NodeCache from 'node-cache'
-
-const CACHE_TTL = 60 * 60 // Cache TTL in seconds (1 hour)
-const cache = new NodeCache({ stdTTL: CACHE_TTL }) // Initialize in-memory cache
-
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
-  }
-
-  const cacheKey = 'githubInfo'
-
-  // Check if data exists in the cache
-  const cachedData = cache.get(cacheKey)
-  if (cachedData) {
-    return res.status(200).json({ githubInfo: cachedData })
   }
 
   interface Repository {
@@ -143,14 +130,14 @@ export default async function handler(req: any, res: any) {
       blog: githubData.blog ?? 'Not provided',
       repositories: uniqueTopRepos ?? [],
     }
-
-    // Store data in the in-memory cache
-    cache.set(cacheKey, githubInfo)
   } catch (error) {
     console.error('Error fetching GitHub data:', error)
     return res.status(500).json({ error: 'Failed to fetch GitHub data' })
   }
 
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate')
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=3600, stale-while-revalidate'
+  )
   res.status(200).json({ githubInfo })
 }
