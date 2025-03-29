@@ -1,9 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import xml2js from 'xml2js'
+import fs from 'fs'
+import path from 'path'
 
-// In-memory cache
-const cache: { [key: string]: { data: any; expiry: number } } = {}
-const CACHE_TTL = 60 * 5 * 1000 // Cache TTL in milliseconds (5 minutes)
+// Cache directory
+const CACHE_DIR = path.resolve('./cache')
+const CACHE_TTL = 60 * 60 * 1000 // Cache TTL in milliseconds (5 minutes)
+
+// Ensure the cache directory exists
+if (!fs.existsSync(CACHE_DIR)) {
+  fs.mkdirSync(CACHE_DIR)
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,13 +22,20 @@ export default async function handler(
       return res.status(400).json({ error: 'Missing or invalid playlist ID' })
     }
 
-    // Check cache
-    const cacheKey = `playlist_${playlistId}`
-    const cached = cache[cacheKey]
-    if (cached && cached.expiry > Date.now()) {
-      return res.status(200).json(cached.data)
+    // Cache file path
+    const cacheFilePath = path.join(CACHE_DIR, `playlist_${playlistId}.json`)
+
+    // Check if cache exists and is valid
+    if (fs.existsSync(cacheFilePath)) {
+      const stats = fs.statSync(cacheFilePath)
+      const now = Date.now()
+      if (now - stats.mtimeMs < CACHE_TTL) {
+        const cachedData = JSON.parse(fs.readFileSync(cacheFilePath, 'utf-8'))
+        return res.status(200).json(cachedData)
+      }
     }
 
+    // Fetch data from YouTube
     const feedUrl = `https://www.youtube.com/feeds/videos.xml?playlist_id=${playlistId}`
     const response = await fetch(feedUrl)
 
@@ -44,11 +58,8 @@ export default async function handler(
       uploadDate: entry.published,
     }))
 
-    // Store in cache
-    cache[cacheKey] = {
-      data: videos,
-      expiry: Date.now() + CACHE_TTL,
-    }
+    // Store data in cache file
+    fs.writeFileSync(cacheFilePath, JSON.stringify(videos), 'utf-8')
 
     res.status(200).json(videos)
   } catch (error) {

@@ -1,20 +1,28 @@
 import { parseStringPromise } from 'xml2js'
+import fs from 'fs'
+import path from 'path'
 
-const cache = new Map<string, { data: any; expiry: number }>()
+const CACHE_DIR = path.resolve('./cache')
+const CACHE_FILE = path.join(CACHE_DIR, 'mediumInfo.json')
+const CACHE_TTL = 60 * 60 * 1000 // Cache for 1 hour
+
+// Ensure the cache directory exists
+if (!fs.existsSync(CACHE_DIR)) {
+  fs.mkdirSync(CACHE_DIR)
+}
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const CACHE_KEY = 'mediumInfo'
-  const CACHE_TTL = 60 * 60 * 1000 // Cache for 1 hour
-
-  // Check if data is in cache and not expired
-  if (cache.has(CACHE_KEY)) {
-    const cachedData = cache.get(CACHE_KEY)
-    if (cachedData && cachedData.expiry > Date.now()) {
-      return res.status(200).json({ mediumInfo: cachedData.data })
+  // Check if cache exists and is valid
+  if (fs.existsSync(CACHE_FILE)) {
+    const stats = fs.statSync(CACHE_FILE)
+    const now = Date.now()
+    if (now - stats.mtimeMs < CACHE_TTL) {
+      const cachedData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'))
+      return res.status(200).json({ mediumInfo: cachedData })
     }
   }
 
@@ -71,8 +79,8 @@ export default async function handler(req: any, res: any) {
       recentPosts: recentPosts,
     }
 
-    // Store the result in the cache
-    cache.set(CACHE_KEY, { data: mediumInfo, expiry: Date.now() + CACHE_TTL })
+    // Store the result in the cache file
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(mediumInfo), 'utf-8')
   } catch (error) {
     console.error('Error fetching Medium data:', error)
     return res.status(500).json({ error: 'Failed to fetch Medium data' })

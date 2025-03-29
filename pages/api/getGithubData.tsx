@@ -1,21 +1,52 @@
-const cache = new Map<string, { data: any; expiry: number }>()
+import fs from 'fs'
+import path from 'path'
+
+const CACHE_DIR = path.resolve('./cache')
+const CACHE_FILE = path.join(CACHE_DIR, 'githubInfo.json')
+const CACHE_TTL = 60 * 60 * 1000 // Cache TTL in milliseconds (1 hour)
+
+// Ensure the cache directory exists
+if (!fs.existsSync(CACHE_DIR)) {
+  fs.mkdirSync(CACHE_DIR)
+}
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const CACHE_KEY = 'githubInfo'
-  const CACHE_TTL = 60 * 60 * 1000
-
-  if (cache.has(CACHE_KEY)) {
-    const cachedData = cache.get(CACHE_KEY)
-    if (cachedData && cachedData.expiry > Date.now()) {
-      return res.status(200).json({ githubInfo: cachedData.data })
+  // Check if cache exists and is valid
+  if (fs.existsSync(CACHE_FILE)) {
+    const stats = fs.statSync(CACHE_FILE)
+    const now = Date.now()
+    if (now - stats.mtimeMs < CACHE_TTL) {
+      const cachedData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'))
+      return res.status(200).json({ githubInfo: cachedData })
     }
   }
 
-  let githubInfo = {
+  interface Repository {
+    name: string
+    description: string
+    stars: number
+    forks: number
+    language: string
+    createdAt: string
+    updatedAt: string
+  }
+
+  let githubInfo: {
+    username: string
+    name: string
+    bio: string
+    publicRepos: number
+    followers: number
+    following: number
+    location: string
+    email: string
+    blog: string
+    repositories: Repository[]
+  } = {
     username: '',
     name: '',
     bio: '',
@@ -25,14 +56,7 @@ export default async function handler(req: any, res: any) {
     location: '',
     email: '',
     blog: '',
-    repositories: [
-      {
-        name: '',
-        description: '',
-        stars: 0,
-        forks: 0,
-      },
-    ],
+    repositories: [],
   }
 
   try {
@@ -113,7 +137,7 @@ export default async function handler(req: any, res: any) {
       new Map([...topByTime, ...topByForks].map((repo) => [repo.name, repo]))
     ).map(([, repo]) => repo)
 
-    // sort uniqueTopRepos by stars+forks
+    // Sort uniqueTopRepos by stars+forks
     uniqueTopRepos.sort((a, b) => b.stars + b.forks - (a.stars + a.forks))
 
     githubInfo = {
@@ -129,7 +153,7 @@ export default async function handler(req: any, res: any) {
       repositories: uniqueTopRepos ?? [],
     }
 
-    cache.set(CACHE_KEY, { data: githubInfo, expiry: Date.now() + CACHE_TTL })
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(githubInfo), 'utf-8')
   } catch (error) {
     console.error('Error fetching GitHub data:', error)
     return res.status(500).json({ error: 'Failed to fetch GitHub data' })
