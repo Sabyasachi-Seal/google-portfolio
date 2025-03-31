@@ -4,6 +4,7 @@ import { LoadTime, LoadProgress, ProjectResult } from 'src/components'
 import { ProjectResponse, getProjects } from 'src/content'
 
 import styles from './Projects.module.scss'
+import { clear } from 'console'
 
 export const Projects: NextPage = () => {
   const [projects, setProjects] = useState<
@@ -26,11 +27,12 @@ export const Projects: NextPage = () => {
 
     const fetchProjects = async () => {
       setLoading(true)
-      setInterval(updateProgress, 200)
+      const interval = setInterval(updateProgress, 200)
       try {
         const data: ProjectResponse = await getProjects()
         const projects = data.githubInfo?.repositories || []
         setProjects(projects)
+        clearInterval(interval)
       } catch (error) {
         console.error('Error fetching projects:', error)
       } finally {
@@ -48,7 +50,7 @@ export const Projects: NextPage = () => {
         </div>
       ) : (
         <>
-          <LoadTime count={projects.length} />
+          <LoadTime count={projects.length} overrideLoadTime={progress} />
           <div className={styles.results}>
             {projects.map((project, index) => (
               <ProjectResult

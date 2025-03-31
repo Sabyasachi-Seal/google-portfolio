@@ -25,11 +25,12 @@ export const Blogs: NextPage = () => {
     }
     const fetchBlogs = async () => {
       setLoading(true)
-      setInterval(updateProgress, 200)
+      const interval = setInterval(updateProgress, 200)
       try {
         const data: BlogResponse = await getBlogs()
         const recentPosts = data.mediumInfo?.recentPosts || []
         setBlogs(recentPosts)
+        clearInterval(interval)
       } catch (error) {
         console.error('Error fetching blogs:', error)
       } finally {
@@ -47,7 +48,7 @@ export const Blogs: NextPage = () => {
         </div>
       ) : (
         <>
-          <LoadTime count={blogs.length} />
+          <LoadTime count={blogs.length} overrideLoadTime={progress} />
           <div className={styles.results}>
             {blogs.map((blog, index) => (
               <BlogResult

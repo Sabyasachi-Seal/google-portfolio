@@ -15,10 +15,11 @@ export const Videos: NextPage = () => {
     }
     const fetchVideos = async () => {
       setLoading(true)
-      setInterval(updateProgress, 200)
+      const interval = setInterval(updateProgress, 200)
       const data = await fetchVideosFromXML()
       setVideos(Array.isArray(data) ? data : [])
       setLoading(false)
+      clearInterval(interval)
     }
     fetchVideos()
   }, [])
@@ -31,7 +32,7 @@ export const Videos: NextPage = () => {
         </div>
       ) : (
         <>
-          <LoadTime count={videos.length} />
+          <LoadTime count={videos.length} overrideLoadTime={progress} />
           <div className={styles.results}>
             {videos.map((video) => (
               <VideoResult
