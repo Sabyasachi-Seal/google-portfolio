@@ -16,14 +16,24 @@ export const Blogs: NextPage = () => {
     }[]
   >([])
 
+  const [loading, setLoading] = useState<boolean>(true)
+  const [progress, setProgress] = useState<number>(0)
+
   useEffect(() => {
+    const updateProgress = () => {
+      setProgress((prev) => (prev < 90 ? prev + 0.1 : prev))
+    }
     const fetchBlogs = async () => {
+      setLoading(true)
+      setInterval(updateProgress, 200)
       try {
         const data: BlogResponse = await getBlogs()
         const recentPosts = data.mediumInfo?.recentPosts || []
         setBlogs(recentPosts)
       } catch (error) {
         console.error('Error fetching blogs:', error)
+      } finally {
+        setLoading(false)
       }
     }
     fetchBlogs()
@@ -31,20 +41,28 @@ export const Blogs: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <LoadTime count={blogs.length} />
-      <div className={styles.results}>
-        {blogs.map((blog, index) => (
-          <BlogResult
-            {...blog}
-            key={blog.link}
-            title={blog.title || 'Untitled'}
-            description={blog.description || 'No description available'}
-            pubDate={blog.pubDate || 'Unknown date'}
-            link={blog.link || '#'}
-            thumbnail={blog.thumbnail || ''}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <div className={styles.loading}>
+          <LoadTime count={progress} />
+        </div>
+      ) : (
+        <>
+          <LoadTime count={blogs.length} />
+          <div className={styles.results}>
+            {blogs.map((blog, index) => (
+              <BlogResult
+                {...blog}
+                key={blog.link}
+                title={blog.title || 'Untitled'}
+                description={blog.description || 'No description available'}
+                pubDate={blog.pubDate || 'Unknown date'}
+                link={blog.link || '#'}
+                thumbnail={blog.thumbnail || ''}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

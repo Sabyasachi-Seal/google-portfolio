@@ -139,7 +139,7 @@ export const About: React.FC = () => {
             {globe}
             <a
               target="_blank"
-              href="http://sabyasachiseal.com"
+              href="http://google.sabyasachiseal.com"
               rel="noreferrer"
             >
               sabyasachiseal.com
