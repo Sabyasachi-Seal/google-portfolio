@@ -163,7 +163,7 @@ export const About: React.FC = () => {
               1970}{' '}
             years),{' '}
             <a
-              href="https://www.google.com/search?q=cape+town&sca_esv=599792272&biw=1280&bih=634&sxsrf=ACQVn08lCKYhcJKz0p7EdS1upai176uH9w%3A1705670213800&ei=RXaqZZnCMLiThbIPo96VyAE&gs_ssp=eJzj4tDP1TcwrMwyMmD04kxOLEhVKMkvzwMAP7oGWQ&oq=cape+town&gs_lp=Egxnd3Mtd2l6LXNlcnAiCWNhcGUgdG93bioCCAAyEBAuGIAEGIoFGEMYsQMYgwEyCxAAGIAEGLEDGIMBMgoQABiABBiKBRhDMgsQABiABBixAxiDATIKEAAYgAQYigUYQzIKEAAYgAQYigUYQzIKEC4YQxiABBiKBTILEC4YrwEYxwEYgAQyBRAAGIAEMgsQABiABBixAxiDATIfEC4YgAQYigUYQxixAxiDARiXBRjcBBjeBBjgBNgBA0iFKFDtCVj2HXACeAGQAQGYAewGoAHpIqoBCTMtMi4yLjIuMrgBAcgBAPgBAcICChAAGEcY1gQYsAPCAg0QABiABBiKBRhDGLADwgIOEAAY5AIY1gQYsAPYAQHCAhMQLhiABBiKBRhDGMgDGLAD2AECwgIEECMYJ8ICChAjGIAEGIoFGCfCAgoQLhiABBiKBRhDwgIOEAAYgAQYigUYsQMYgwHCAhQQLhiABBiKBRixAxiDARjHARjRA8ICEBAAGIAEGIoFGEMYsQMYgwHiAwQYACBBiAYBkAYSugYGCAEQARgJugYGCAIQARgIugYGCAMQARgU&sclient=gws-wiz-serp"
+              href="https://www.google.com/search?q=kolkata"
               target="_blank"
               rel="noreferrer"
             >
@@ -177,12 +177,12 @@ export const About: React.FC = () => {
               target="_blank"
               rel="noreferrer"
             >
-              Techno Main Salt Lake
+              Bachelor of Technology
             </a>{' '}
-            (2024)
+            (TMSL, 2024)
           </div>
           <div className={styles.stat}>
-            <span>Skilled In: </span>Python, DevOps, Cloud (2024){' '}
+            <span>Skilled In: </span>Python, DevOps, Cloud{' '}
             <a
               href="https://www.linkedin.com/in/sabyasachi-seal-4461711bb/"
               target="_blank"
