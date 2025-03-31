@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { LoadTime, VideoResult } from 'src/components'
+import { LoadTime, LoadProgress, VideoResult } from 'src/components'
 import { fetchVideosFromXML } from 'src/content'
 
 import styles from './Videos.module.scss'
@@ -27,7 +27,7 @@ export const Videos: NextPage = () => {
     <div className={styles.container}>
       {loading ? (
         <div className={styles.loading}>
-          <LoadTime count={progress} />
+          <LoadProgress count={progress} />
         </div>
       ) : (
         <>

@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { LoadTime, ProjectResult } from 'src/components'
+import { LoadTime, LoadProgress, ProjectResult } from 'src/components'
 import { ProjectResponse, getProjects } from 'src/content'
 
 import styles from './Projects.module.scss'
@@ -44,7 +44,7 @@ export const Projects: NextPage = () => {
     <div className={styles.container}>
       {loading ? (
         <div className={styles.loading}>
-          <LoadTime count={progress} />
+          <LoadProgress count={progress} />
         </div>
       ) : (
         <>

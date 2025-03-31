@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { LoadTime, BlogResult } from 'src/components'
+import { LoadTime, LoadProgress, BlogResult } from 'src/components'
 import { getBlogs, BlogResponse } from 'src/content'
 
 import styles from './Blogs.module.scss'
@@ -43,7 +43,7 @@ export const Blogs: NextPage = () => {
     <div className={styles.container}>
       {loading ? (
         <div className={styles.loading}>
-          <LoadTime count={progress} />
+          <LoadProgress count={progress} />
         </div>
       ) : (
         <>
