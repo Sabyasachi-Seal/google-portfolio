@@ -98,7 +98,12 @@ export const SearchBar: React.FC<Props> = ({
     let input: HTMLInputElement | null = null
 
     if (searchRef) {
-      if (typeof searchRef !== 'function' && 'current' in searchRef) {
+      if (
+        typeof searchRef !== 'function' &&
+        searchRef != null &&
+        typeof searchRef !== 'string' &&
+        'current' in searchRef
+      ) {
         input = searchRef.current // If searchRef is a useRef
       } else if (typeof searchRef === 'function') {
         // Handle legacy ref (function ref)
