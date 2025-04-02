@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { LegacyRef } from 'react'
+import { LegacyRef, useEffect, useRef } from 'react'
 import styles from './SearchBar.module.scss'
 
 const lens = (
@@ -90,6 +90,34 @@ export const SearchBar: React.FC<Props> = ({
   landing = false,
   clickFunc = () => void 0,
 }) => {
+  // Create a ref for the input element (for internal use if searchRef isn’t provided)
+  const internalInputRef = useRef<HTMLInputElement>(null)
+
+  // Function to scroll the input to the end
+  const scrollToEnd = () => {
+    let input: HTMLInputElement | null = null
+
+    if (searchRef) {
+      if (typeof searchRef !== 'function' && 'current' in searchRef) {
+        input = searchRef.current // If searchRef is a useRef
+      } else if (typeof searchRef === 'function') {
+        // Handle legacy ref (function ref)
+        console.warn('Function refs are not supported for scrolling logic.')
+      }
+    } else {
+      input = internalInputRef.current // Fallback to internal ref
+    }
+
+    if (input && input instanceof HTMLInputElement) {
+      input.scrollLeft = input.scrollWidth // Scroll to the maximum width (end of content)
+    }
+  }
+
+  // Scroll to the end whenever searchText changes
+  useEffect(() => {
+    scrollToEnd()
+  }, [searchText])
+
   return (
     <>
       <div
