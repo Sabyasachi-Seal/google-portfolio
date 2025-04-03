@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { friends, profiles } from 'src/content'
+import { friends, profiles, getBlogs, getProjects } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
 import { userInfo } from 'constants/userInfo'
-
+import { encrypt, decrypt } from 'lib/cryptoUtils'
 const globe = (
   <svg
     focusable="false"
@@ -21,11 +21,10 @@ export const About: React.FC = () => {
   const [messages, setMessages] = useState<{ user: string; bot: string }[]>([
     {
       user: '',
-      bot: "Hello there! How can I help you today? I'm Sabyasachi Seal, a software engineer from Kolkata. I'm passionate about coding and building new things.",
+      bot: 'Hello there! How can I help you today?',
     },
   ])
   const [input, setInput] = useState('')
-  // Removed unused isTyping state
   const [githubData, setGithubData] = useState<any>(null)
   const [mediumData, setMediumData] = useState<any>(null)
 
@@ -43,16 +42,7 @@ export const About: React.FC = () => {
   useEffect(() => {
     const fetchGithubData = async () => {
       try {
-        const response = await fetch('/api/getGithubData', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch GitHub data')
-        }
-
-        const data = await response.json()
+        const data = await getProjects()
         setGithubData(data)
         userInfo.github = githubData
       } catch (error) {
@@ -66,14 +56,7 @@ export const About: React.FC = () => {
   useEffect(() => {
     const fetchMediumData = async () => {
       try {
-        const response = await fetch('/api/getMediumData', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        })
-        if (!response.ok) {
-          throw new Error('Failed to fetch Medium data')
-        }
-        const data = await response.json()
+        const data = await getBlogs()
         setMediumData(data)
         userInfo.medium = mediumData
       } catch (error) {
@@ -87,7 +70,6 @@ export const About: React.FC = () => {
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    // Mark that the user has started chatting
     if (!hasStartedChatting) {
       setHasStartedChatting(true)
       setIsChatOpen(true)
@@ -96,16 +78,17 @@ export const About: React.FC = () => {
     const updatedMessages = [...messages, { user: input, bot: 'Thinking...' }]
     setMessages(updatedMessages)
     setInput('')
-    // Removed isTyping update
 
     userInfo.github = githubData
     userInfo.medium = mediumData
 
     try {
+      const encryptedUserInfo = encrypt(userInfo)
+
       const response = await fetch('/api/callGeminiApi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, userInfo: userInfo }),
+        body: JSON.stringify({ prompt: input, userInfo: encryptedUserInfo }),
       })
 
       if (!response.ok) {
@@ -113,6 +96,7 @@ export const About: React.FC = () => {
       }
 
       const data = await response.json()
+
       const botResponse = data.response || 'Sorry, something went wrong.'
 
       let currentText = ''
@@ -127,7 +111,6 @@ export const About: React.FC = () => {
         'Sorry, something went wrong.'
       setMessages([...updatedMessages])
     }
-    // Removed isTyping update
   }
 
   return (

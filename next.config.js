@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const WebpackObfuscator = require('webpack-obfuscator')
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -28,6 +30,24 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  webpack(config, { dev, isServer }) {
+    if (!dev && !isServer) {
+      config.plugins.push(
+        new WebpackObfuscator(
+          {
+            rotateStringArray: true,
+            compact: true,
+            controlFlowFlattening: true,
+            deadCodeInjection: false,
+            stringArray: true,
+            stringArrayThreshold: 0.75,
+          },
+          []
+        )
+      )
+    }
+    return config
   },
 }
 

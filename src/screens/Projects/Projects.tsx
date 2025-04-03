@@ -4,7 +4,6 @@ import { LoadTime, LoadProgress, ProjectResult } from 'src/components'
 import { ProjectResponse, getProjects } from 'src/content'
 
 import styles from './Projects.module.scss'
-import { clear } from 'console'
 
 export const Projects: NextPage = () => {
   const [projects, setProjects] = useState<

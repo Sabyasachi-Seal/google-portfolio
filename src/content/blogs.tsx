@@ -1,5 +1,6 @@
 import { ComponentProps } from 'react'
 import { BlogResult } from 'src/components'
+import { decrypt } from '../../lib/cryptoUtils'
 
 type Blog = ComponentProps<typeof BlogResult>
 
@@ -20,10 +21,12 @@ export async function getBlogs(): Promise<BlogResponse> {
       throw new Error('Failed to fetch Medium data')
     }
 
-    const data = await response.json()
-    // console.log('data:', data)
+    const { data: encryptedResponse } = await response.json()
 
-    return data
+    // Decrypt the response
+    const decryptedData = decrypt(encryptedResponse)
+
+    return decryptedData
   } catch (error) {
     console.error('Error fetching Medium data:', error)
     return { mediumInfo: { recentPosts: [] } }

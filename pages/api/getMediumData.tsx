@@ -1,5 +1,6 @@
 import { parseStringPromise } from 'xml2js'
 import NodeCache from 'node-cache'
+import { withEncryption } from '../../lib/apiMiddleware'
 
 // Initialize cache with 1 hour TTL
 const cache = new NodeCache({
@@ -9,7 +10,7 @@ const cache = new NodeCache({
 
 const CACHE_KEY = 'mediumInfo'
 
-export default async function handler(req: any, res: any) {
+async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
@@ -85,3 +86,5 @@ export default async function handler(req: any, res: any) {
   )
   res.status(200).json({ mediumInfo })
 }
+
+export default withEncryption(handler)

@@ -1,14 +1,16 @@
 // pages/api/gemini.js
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { chatprompt } from 'constants/userInfo'
-// import
-
-export default async function handler(req: any, res: any) {
+import { withEncryption } from '../../lib/apiMiddleware'
+import { decrypt } from '../../lib/cryptoUtils'
+async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
   const { prompt, userInfo } = req.body
+
+  const decrpytedUserInfo = decrypt(userInfo)
 
   try {
     const apiKey = process.env.GEMINI_API_KEY ?? '' // Ensure this is set in .env.local
@@ -16,7 +18,7 @@ export default async function handler(req: any, res: any) {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const chatPrompt = `${chatprompt}: ${JSON.stringify(
-      userInfo
+      decrpytedUserInfo
     )}. Question: ${prompt}`
 
     const result = await model.generateContent(chatPrompt)
@@ -28,3 +30,5 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({ error: 'Failed to fetch response' })
   }
 }
+
+export default handler

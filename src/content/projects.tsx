@@ -1,5 +1,6 @@
 import { ComponentProps } from 'react'
 import { ProjectResult } from 'src/components'
+import { decrypt } from '../../lib/cryptoUtils'
 
 type Project = ComponentProps<typeof ProjectResult>
 
@@ -20,10 +21,12 @@ export async function getProjects(): Promise<ProjectResponse> {
       throw new Error('Failed to fetch Github data')
     }
 
-    const data = await response.json()
-    // console.log('data:', data)
+    const { data: encryptedResponse } = await response.json()
 
-    return data
+    // Decrypt the response
+    const decryptedData = decrypt(encryptedResponse)
+
+    return decryptedData
   } catch (error) {
     console.error('Error fetching Github data:', error)
     return { githubInfo: { repositories: [] } }

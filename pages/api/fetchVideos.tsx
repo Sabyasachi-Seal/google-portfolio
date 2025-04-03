@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import xml2js from 'xml2js'
 import NodeCache from 'node-cache'
+import { withEncryption } from '../../lib/apiMiddleware'
 
 // Initialize cache with 1 hour TTL
 const cache = new NodeCache({
@@ -8,10 +9,7 @@ const cache = new NodeCache({
   checkperiod: 120, // Check for expired items every 2 minutes
 })
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { playlistId } = req.query
     if (!playlistId || typeof playlistId !== 'string') {
@@ -63,3 +61,5 @@ export default async function handler(
     res.status(500).json({ error: 'Failed to fetch videos' })
   }
 }
+
+export default withEncryption(handler)
