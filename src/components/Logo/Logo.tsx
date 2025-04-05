@@ -20,6 +20,7 @@ export const Logo: React.FC<Props> = ({ height = 92, width = 272 }) => {
       src={
         theme === 'light' ? `/images/google_light.png` : `/images/google.png`
       }
+      sizes={`${width}px`}
     />
   )
 }

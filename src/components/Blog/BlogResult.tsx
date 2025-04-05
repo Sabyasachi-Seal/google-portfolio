@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { SearchLink } from 'src/components'
 import styles from './BlogResult.module.scss'
 

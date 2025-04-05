@@ -33,6 +33,7 @@ export const VideoResult: React.FC<Props> = ({
             src={`https://i1.ytimg.com/vi/${id}/mqdefault.jpg`}
             alt="thumbnail"
             fill
+            sizes="(max-width: 768px) 158px, 178px"
           />
         </div>
         <div className={styles.description}>

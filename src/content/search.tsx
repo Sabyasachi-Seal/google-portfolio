@@ -18,7 +18,13 @@ export const searchResults: Content[] = [
     extras: <b>Projects, Tech Stack</b>,
     link: 'https://github.com/Sabyasachi-Seal',
     image: (
-      <Image src={image_dict.github} alt="Sabyasachi Seal" priority fill />
+      <Image
+        src={image_dict.github}
+        alt="Sabyasachi Seal"
+        priority
+        fill
+        sizes="fill"
+      />
     ),
   },
   {
@@ -35,9 +41,9 @@ export const searchResults: Content[] = [
       <Image
         src={image_dict.linkedin}
         alt="Sabyasachi Seal Linkedin"
-        layout="fill"
-        objectFit="contain"
+        fill
         priority
+        sizes="fill"
       />
     ),
   },
@@ -60,9 +66,9 @@ export const searchResults: Content[] = [
       <Image
         src={image_dict.resume}
         alt="Sabyasachi Seal Resume"
-        layout="fill"
-        objectFit="contain"
+        fill
         priority
+        sizes="fill"
       />
     ),
   },

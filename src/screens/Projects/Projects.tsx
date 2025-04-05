@@ -54,7 +54,7 @@ export const Projects: NextPage = () => {
             {projects.map((project, index) => (
               <ProjectResult
                 {...project}
-                key={project.link}
+                key={`${project.link}${index}`}
                 name={project.name || 'Untitled'}
                 description={project.description || 'No description available'}
                 link={`https://github.com/Sabyasachi-Seal/${project.name}`}

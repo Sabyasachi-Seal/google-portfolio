@@ -1,24 +1,11 @@
 import { parseStringPromise } from 'xml2js'
-import NodeCache from 'node-cache'
 import { withEncryption } from '../../lib/apiMiddleware'
-
-// Initialize cache with 1 hour TTL
-const cache = new NodeCache({
-  stdTTL: 60 * 60, // 1 hour in seconds
-  checkperiod: 120, // Check for expired items every 2 minutes
-})
 
 const CACHE_KEY = 'mediumInfo'
 
 async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
-  }
-
-  // Check cache first
-  const cachedData = cache.get(CACHE_KEY)
-  if (cachedData) {
-    return res.status(200).json({ mediumInfo: cachedData })
   }
 
   let mediumInfo: {
@@ -30,9 +17,6 @@ async function handler(req: any, res: any) {
       description: string
       thumbnail: string
     }[]
-  } = {
-    username: '',
-    recentPosts: [],
   }
 
   try {
@@ -72,9 +56,6 @@ async function handler(req: any, res: any) {
       username: mediumUsername,
       recentPosts: recentPosts,
     }
-
-    // Store in cache
-    cache.set(CACHE_KEY, mediumInfo)
   } catch (error) {
     console.error('Error fetching Medium data:', error)
     return res.status(500).json({ error: 'Failed to fetch Medium data' })

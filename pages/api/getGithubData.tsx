@@ -26,17 +26,6 @@ async function handler(req: any, res: any) {
     email: string
     blog: string
     repositories: Repository[]
-  } = {
-    username: '',
-    name: '',
-    bio: '',
-    publicRepos: 0,
-    followers: 0,
-    following: 0,
-    location: '',
-    email: '',
-    blog: '',
-    repositories: [],
   }
 
   try {

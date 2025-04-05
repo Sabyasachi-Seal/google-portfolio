@@ -3,7 +3,7 @@ import { friends, profiles, getBlogs, getProjects } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
 import { userInfo } from 'constants/userInfo'
-import { encrypt, decrypt } from 'lib/cryptoUtils'
+import { encrypt } from 'lib/cryptoUtils'
 const globe = (
   <svg
     focusable="false"

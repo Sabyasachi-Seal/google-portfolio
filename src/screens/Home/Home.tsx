@@ -28,6 +28,7 @@ export const Home: NextPage = () => {
               alt="profile picture"
               height={56}
               width={56.1}
+              sizes="56px"
             />
           </div>
           <div className={styles.name}>

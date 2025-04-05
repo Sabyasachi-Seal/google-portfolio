@@ -1,28 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import xml2js from 'xml2js'
-import NodeCache from 'node-cache'
 import { withEncryption } from '../../lib/apiMiddleware'
-
-// Initialize cache with 1 hour TTL
-const cache = new NodeCache({
-  stdTTL: 60 * 60, // 1 hour in seconds
-  checkperiod: 120, // Check for expired items every 2 minutes
-})
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { playlistId } = req.query
     if (!playlistId || typeof playlistId !== 'string') {
       return res.status(400).json({ error: 'Missing or invalid playlist ID' })
-    }
-
-    // Cache key for this specific playlist
-    const cacheKey = `playlist_${playlistId}`
-
-    // Check if data is in cache
-    const cachedData = cache.get(cacheKey)
-    if (cachedData) {
-      return res.status(200).json(cachedData)
     }
 
     // Fetch data from YouTube
@@ -47,9 +31,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       description: entry['media:group']['media:description'] || '',
       uploadDate: entry.published,
     }))
-
-    // Store data in cache
-    cache.set(cacheKey, videos)
 
     res.setHeader(
       'Cache-Control',

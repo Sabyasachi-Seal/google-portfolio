@@ -34,10 +34,10 @@ export const Videos: NextPage = () => {
         <>
           <LoadTime count={videos.length} overrideLoadTime={progress} />
           <div className={styles.results}>
-            {videos.map((video) => (
+            {videos.map((video, index) => (
               <VideoResult
                 {...video}
-                key={video.id}
+                key={`${video.id}${index}`}
                 title={video.title || 'Untitled'}
                 description={video.description || 'No description available'}
                 uploadDate={video.uploadDate || 'Unknown date'}

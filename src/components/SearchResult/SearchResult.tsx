@@ -42,6 +42,7 @@ export const SearchResult: React.FC<Props> = ({
                   width={16}
                   src={`https://www.google.com/s2/favicons?domain_url=${link}&sz=50`}
                   alt="favicon"
+                  sizes="16px"
                 />
               </div>
               <SearchLink link={link} protocol />

@@ -11,7 +11,12 @@ export const Images: NextPage = () => {
         <div className={styles.block} key={id}>
           <a href={`{id}`} target="_blank" rel="noreferrer">
             <div className={styles.image}>
-              <Image src={`${id}`} alt="photography image" fill priority />
+              <Image
+                src={`${id}`}
+                alt="photography image"
+                priority
+                sizes="fill"
+              />
             </div>
           </a>
         </div>
