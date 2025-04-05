@@ -11,7 +11,7 @@ export const Videos: NextPage = () => {
   const [progress, setProgress] = useState<number>(0)
   useEffect(() => {
     const updateProgress = () => {
-      setProgress((prev) => (prev < 90 ? prev + 0.1 : prev))
+      setProgress((prev) => prev + 0.1)
     }
     const fetchVideos = async () => {
       setLoading(true)

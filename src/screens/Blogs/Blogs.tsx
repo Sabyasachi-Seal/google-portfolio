@@ -21,7 +21,7 @@ export const Blogs: NextPage = () => {
 
   useEffect(() => {
     const updateProgress = () => {
-      setProgress((prev) => (prev < 90 ? prev + 0.1 : prev))
+      setProgress((prev) => prev + 0.1)
     }
     const fetchBlogs = async () => {
       setLoading(true)
