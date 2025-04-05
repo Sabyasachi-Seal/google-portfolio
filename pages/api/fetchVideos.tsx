@@ -1,10 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import xml2js from 'xml2js'
 import { withEncryption } from '../../lib/apiMiddleware'
+import { playlistId } from 'constants/playlistInfo'
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: any, res: any) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   try {
-    const { playlistId } = req.query
     if (!playlistId || typeof playlistId !== 'string') {
       return res.status(400).json({ error: 'Missing or invalid playlist ID' })
     }
