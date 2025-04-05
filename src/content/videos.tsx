@@ -1,19 +1,14 @@
 import { ComponentProps } from 'react'
 import { VideoResult } from 'src/components'
-import { playlistId } from 'constants/playlistInfo'
 import { encrypt, decrypt } from '../../lib/cryptoUtils'
 
 type Video = ComponentProps<typeof VideoResult>
 
-export async function fetchVideosFromXML(): Promise<Video[]> {
+export async function fetchVideosFromXML(
+  playlistId: string = 'PLQC9gmr8t9R9tUE68IHZwpMeR8-DgqJkT'
+): Promise<Video[]> {
   try {
-    // Encrypt the query data
-    const queryData = { playlistId }
-    const encryptedData = encrypt(queryData)
-
-    const response = await fetch(
-      `/api/fetchVideos?encryptedData=${encodeURIComponent(encryptedData)}`
-    )
+    const response = await fetch(`/api/fetchVideos?playlistId=${playlistId}`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`)
