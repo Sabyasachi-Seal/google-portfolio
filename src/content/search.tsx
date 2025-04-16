@@ -5,6 +5,8 @@ import { image_dict } from 'src/content/images'
 
 type Content = ComponentProps<typeof SearchResult>
 
+const contactFormLink = process.env.NEXT_PUBLIC_CONTACT_FORM_LINK
+
 export const searchResults: Content[] = [
   {
     title: 'Personal Github',
@@ -116,6 +118,6 @@ export const searchResults: Content[] = [
       </>
     ),
     extras: <b>Contact</b>,
-    link: 'https://sabyasachiseal.com/#section-contacts',
+    link: contactFormLink ?? 'https://www.google.com/search?q=sabyasachi+seal',
   },
 ]
