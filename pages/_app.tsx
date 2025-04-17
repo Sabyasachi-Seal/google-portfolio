@@ -13,6 +13,7 @@ import { Landing } from 'src/screens'
 
 import { useRouter } from 'next/router'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import { Analytics } from '@vercel/analytics/react'
 
 function GoogleSearch({ Component, pageProps }: AppProps) {
   const [landing, setLanding] = useState(true)
@@ -66,6 +67,7 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
           )}
         </div>
       </Compose>
+      <Analytics route={router.pathname} />
     </>
   )
 }
