@@ -119,5 +119,6 @@ export const searchResults: Content[] = [
     ),
     extras: <b>Contact</b>,
     link: contactFormLink ?? 'https://www.google.com/search?q=sabyasachi+seal',
+    thumbnail: image_dict.contact,
   },
 ]

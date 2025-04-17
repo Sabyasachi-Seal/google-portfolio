@@ -21,6 +21,7 @@ interface Props {
   description: JSX.Element
   extras?: JSX.Element
   image?: JSX.Element
+  thumbnail?: string
 }
 
 export const SearchResult: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const SearchResult: React.FC<Props> = ({
   description,
   extras,
   image,
+  thumbnail,
 }: Props) => {
   return (
     <div className={styles.container}>
@@ -40,7 +42,10 @@ export const SearchResult: React.FC<Props> = ({
                 <Image
                   height={16}
                   width={16}
-                  src={`https://www.google.com/s2/favicons?domain_url=${link}&sz=50`}
+                  src={
+                    thumbnail ??
+                    `https://www.google.com/s2/favicons?domain_url=${link}&sz=50`
+                  }
                   alt="favicon"
                   sizes="16px"
                 />
