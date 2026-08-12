@@ -104,9 +104,13 @@ export const skills = [
     type: 'LANGUAGE',
     history: [34, 46],
   },
-].map((skill) => ({
+].map((skill, skillIndex) => ({
   ...skill,
-  history: pad(skill.history.map((value) => value + Math.random() * 3)),
+  history: pad(
+    skill.history.map(
+      (value, historyIndex) => value + ((skillIndex + historyIndex) % 4) * 0.75
+    )
+  ),
 }))
 
 skills.sort((a, b) => b.history.at(-1) - a.history.at(-1))
@@ -171,12 +175,12 @@ skills.forEach((skill) => {
 
 for (let i = 0; i < HISTORY_LENGTH; i++) {
   let curr = 0
-  frontend.forEach(({ history }) => (curr += history.at(i)))
-  frontendData.push({ y: curr / frontend.length, x: i })
+  frontend.forEach(({ history }) => (curr += history.at(i) ?? 0))
+  frontendData.push({ y: frontend.length ? curr / frontend.length : 0, x: i })
 
   curr = 0
-  backend.forEach(({ history }) => (curr += history.at(i)))
-  backendData.push({ y: curr / backend.length, x: i })
+  backend.forEach(({ history }) => (curr += history.at(i) ?? 0))
+  backendData.push({ y: backend.length ? curr / backend.length : 0, x: i })
 }
 
 export const frontendDataRaw = skills

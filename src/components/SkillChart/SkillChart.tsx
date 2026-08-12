@@ -25,12 +25,18 @@ const rawData: { [key: string]: Serie[] } = {
 
 export const SkillChart: React.FC = () => {
   const { skill } = useContext(SkillsContext)
-  const { data, name, symbol, type, category, history } = skillsMap[skill]
+  const skillData = skillsMap[skill] ?? skillsMap.React
+
+  if (!skillData) return null
+
+  const { data, name, symbol, type, category, history } = skillData
+  const currentValue = history.at(-1) ?? 0
+  const previousValue = history.at(-2) ?? currentValue
   const percent = useMemo(
     () =>
       // prettier-ignore
-      ((history.at(-1) ?? 0) - (history.at(-2) ?? 0)) / ((history.at(-1) ?? 100) / 100),
-    [history]
+      (currentValue - previousValue) / (currentValue / 100 || 1),
+    [currentValue, previousValue]
   )
 
   const { isMobile } = useWindowSize()
@@ -45,7 +51,7 @@ export const SkillChart: React.FC = () => {
       </div>
       <div className={styles.stats}>
         <div>
-          <h1>{history.at(-1).toFixed(2)}</h1> <Percentage value={percent} />
+          <h1>{currentValue.toFixed(2)}</h1> <Percentage value={percent} />
         </div>
       </div>
       <div className={styles.range}>
@@ -138,3 +144,5 @@ export const SkillChart: React.FC = () => {
     </div>
   )
 }
+
+export default SkillChart

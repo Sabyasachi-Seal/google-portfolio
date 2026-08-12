@@ -38,10 +38,13 @@ export const SkillResult: React.FC<Props> = ({
   )
 
   const status = useMemo(() => (change > 0 ? 'up' : 'down'), [change])
-  const color = useMemo(
-    () => colors[Math.floor(Math.random() * colors.length)],
-    []
-  )
+  const color = useMemo(() => {
+    let colorIndex = 0
+    for (let index = 0; index < name.length; index++) {
+      colorIndex += name.charCodeAt(index)
+    }
+    return colors[colorIndex % colors.length]
+  }, [name])
 
   const handleClick = useCallback(() => {
     setSkill(name)

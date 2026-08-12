@@ -13,51 +13,32 @@ import styles from './Landing.module.scss'
 interface LandingProps {
   searchText: string
   searchRef: LegacyRef<HTMLInputElement>
-  onSearchClick: VoidFunction
+  onSearchClick: (query: string) => void
+  onLuckyClick: VoidFunction
+  onUserInteraction: VoidFunction
 }
 
 export const Landing: React.FC<LandingProps> = ({
   searchText,
   searchRef,
   onSearchClick,
+  onLuckyClick,
+  onUserInteraction,
 }: LandingProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const [buttonText, setButtonText] = useState('How can I help you ?')
-
-  const redirectToLucky = useCallback(() => {
-    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-  }, [])
+  const [query, setQuery] = useState(searchText)
+  const [hasUserEdited, setHasUserEdited] = useState(false)
 
   useEffect(() => {
-    const texts = [
-      'How can I help you ?',
-      'Click here or Press ENTER',
-      'What are you waiting for?',
-    ]
-    let currentIndex = 0
-    let currentText = ''
-    let index = 0
-
-    const typeEffect = () => {
-      if (index < texts[currentIndex].length) {
-        currentText += texts[currentIndex][index]
-        setButtonText(currentText)
-        index++
-        setTimeout(typeEffect, 100) // Add a delay of 100ms between each character
-      } else {
-        setTimeout(() => {
-          currentIndex = (currentIndex + 1) % texts.length // Switch to the next text
-          currentText = ''
-          index = 0
-          typeEffect() // Start typing the next text
-        }, 5000) // Wait 5 seconds before switching
-      }
+    if (!hasUserEdited) {
+      setQuery(searchText)
     }
+  }, [hasUserEdited, searchText])
 
-    typeEffect() // Start the typing effect
-
-    return () => {} // No cleanup needed for this implementation
-  }, [])
+  const submitSearch = useCallback(() => {
+    onUserInteraction()
+    onSearchClick(query)
+  }, [onSearchClick, onUserInteraction, query])
 
   return (
     <div className={styles.container}>
@@ -67,16 +48,23 @@ export const Landing: React.FC<LandingProps> = ({
           <Logo />
         </div>
         <SearchBar
-          clickFunc={onSearchClick}
+          clickFunc={submitSearch}
           searchRef={searchRef}
-          searchText={searchText}
+          searchText={query}
+          placeholder="Type anything"
+          onClick={onUserInteraction}
+          onChangeText={(value) => {
+            onUserInteraction()
+            setHasUserEdited(true)
+            setQuery(value)
+          }}
           landing
         />
         <div className={styles.buttons}>
-          <LandingButton onClick={onSearchClick} buttonRef={buttonRef}>
-            {buttonText}
+          <LandingButton onClick={submitSearch} buttonRef={buttonRef}>
+            How can I help you ?
           </LandingButton>
-          <LandingButton onClick={redirectToLucky}>
+          <LandingButton onClick={onLuckyClick}>
             I&apos;m Feeling Lucky
           </LandingButton>
         </div>

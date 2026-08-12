@@ -13,6 +13,7 @@
 
 .content {
   @include row;
+  align-items: flex-start;
 }
 
 .results {
@@ -33,7 +34,141 @@
     @include themed-styles {
       background-color: themed-color(background-contrast);
     }
+
     margin-bottom: 0;
+  }
+}
+
+.summaryCard,
+.compareCard,
+.featuredSection,
+.resultsSection,
+.recentSection,
+.linkedSection {
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  border-radius: 18px;
+
+  @include themed-styles {
+    background-color: themed-color(background-contrast);
+    border: 1px solid themed-color(footer-border);
+    color: themed-color(text-high-contrast);
+  }
+}
+
+.summaryHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.summaryHeader,
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+
+  @include themed-styles {
+    color: themed-color(low-saturation-accent);
+  }
+}
+
+.summaryQuery {
+  font-family: 'Product Sans', sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.summaryText {
+  margin: 0;
+  line-height: 24px;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+}
+
+.confidence {
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  align-self: center;
+  white-space: nowrap;
+
+  @include themed-styles {
+    background-color: themed-color(button-background);
+    color: themed-color(text-high-contrast);
+  }
+}
+
+.chipRow,
+.linkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.chip,
+.recentChip,
+.sourceChip,
+.relatedChip {
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+
+  @include themed-styles {
+    background-color: themed-color(button-background);
+    color: themed-color(text-high-contrast);
+  }
+}
+
+.linkRow a {
+  font-size: 13px;
+  text-decoration: underline;
+
+  @include themed-styles {
+    color: themed-color(primary-accent);
+  }
+}
+
+.emptyState {
+  font-size: 13px;
+
+  @include themed-styles {
+    color: themed-color(text-med-contrast);
+  }
+}
+
+.featuredGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.compareColumns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+
+  h4 {
+    margin: 0 0 10px;
+    font-size: 16px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    line-height: 20px;
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -141,6 +276,9 @@
 }
 
 .info {
+  @include col;
+  gap: 28px;
+
   @include mobile {
     display: none;
   }

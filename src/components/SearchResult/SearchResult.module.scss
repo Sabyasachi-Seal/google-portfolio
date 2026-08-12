@@ -101,6 +101,24 @@
   font-size: 14px;
 }
 
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.highlight {
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+
+  @include themed-styles {
+    background-color: themed-color(button-background);
+    color: themed-color(text-high-contrast);
+  }
+}
+
 .hover:hover {
   cursor: pointer;
 

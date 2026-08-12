@@ -22,6 +22,7 @@ interface Props {
   extras?: JSX.Element
   image?: JSX.Element
   thumbnail?: string
+  highlights?: string[]
 }
 
 export const SearchResult: React.FC<Props> = ({
@@ -31,6 +32,7 @@ export const SearchResult: React.FC<Props> = ({
   extras,
   image,
   thumbnail,
+  highlights = [],
 }: Props) => {
   return (
     <div className={styles.container}>
@@ -60,6 +62,15 @@ export const SearchResult: React.FC<Props> = ({
           <div className={styles.text}>
             <div className={styles.description}>{description}</div>
             {extras && <div className={styles.extras}>{extras}</div>}
+            {highlights.length ? (
+              <div className={styles.highlights}>
+                {highlights.map((highlight) => (
+                  <span key={highlight} className={styles.highlight}>
+                    {highlight}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           {image && <div className={styles.image}>{image}</div>}
         </div>

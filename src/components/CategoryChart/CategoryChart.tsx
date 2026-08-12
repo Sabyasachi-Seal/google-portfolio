@@ -61,3 +61,5 @@ export const CategoryChart: React.FC<Props> = ({ name, data }: Props) => {
     </div>
   )
 }
+
+export default CategoryChart

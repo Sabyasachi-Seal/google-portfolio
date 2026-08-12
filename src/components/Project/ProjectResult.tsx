@@ -7,6 +7,7 @@ interface Props {
   forks: number
   language: string
   link: string
+  highlights?: string[]
 }
 
 export const ProjectResult: React.FC<Props> = ({
@@ -16,6 +17,7 @@ export const ProjectResult: React.FC<Props> = ({
   forks,
   language,
   link,
+  highlights = [],
 }: Props) => {
   return (
     <a href={link} target="_blank" rel="noreferrer">
@@ -33,6 +35,15 @@ export const ProjectResult: React.FC<Props> = ({
               <span>⭐ {stars}</span> · <span>🍴 {forks}</span> ·{' '}
               <span>💻 {language}</span>
             </p>
+            {highlights.length ? (
+              <div className={styles.highlights}>
+                {highlights.map((highlight) => (
+                  <span key={highlight} className={styles.highlight}>
+                    {highlight}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

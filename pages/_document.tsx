@@ -1,7 +1,6 @@
 /* eslint @next/next/google-font-display: 0 */
 /* eslint @next/next/google-font-preconnect: 0 */
 import { Html, Head, Main, NextScript } from 'next/document'
-import { Home, Images, Videos, Blogs, Projects } from 'src/screens'
 
 export default function Document() {
   return (
@@ -43,12 +42,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <div style={{ display: 'none' }}>
-          <Home />
-          <Videos />
-          <Blogs />
-          {/* <Images /> */}
-        </div>
       </body>
     </Html>
   )

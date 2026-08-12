@@ -82,6 +82,9 @@ interface Props {
   searchRef?: LegacyRef<HTMLInputElement>
   landing?: boolean
   clickFunc?: VoidFunction
+  onChangeText?: (value: string) => void
+  onClick?: VoidFunction
+  placeholder?: string
 }
 
 export const SearchBar: React.FC<Props> = ({
@@ -89,6 +92,9 @@ export const SearchBar: React.FC<Props> = ({
   searchRef,
   landing = false,
   clickFunc = () => void 0,
+  onChangeText,
+  onClick,
+  placeholder,
 }) => {
   // Create a ref for the input element (for internal use if searchRef isn’t provided)
   const internalInputRef = useRef<HTMLInputElement>(null)
@@ -136,7 +142,10 @@ export const SearchBar: React.FC<Props> = ({
           ref={searchRef}
           className={styles.input}
           value={searchText}
-          onChange={() => void 0}
+          placeholder={placeholder}
+          onClick={onClick}
+          onChange={(e) => onChangeText?.(e.target.value)}
+          readOnly={!onChangeText}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               clickFunc()
@@ -162,7 +171,10 @@ export const SearchBar: React.FC<Props> = ({
             ref={searchRef}
             className={styles.input}
             value={searchText}
-            onChange={() => void 0}
+            placeholder={placeholder}
+            onClick={onClick}
+            onChange={(e) => onChangeText?.(e.target.value)}
+            readOnly={!onChangeText}
           />
           {clear}
           <span />

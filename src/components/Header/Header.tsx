@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
   book,
@@ -57,7 +56,13 @@ const routes = [
   },
 ]
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  searchText?: string
+}
+
+export const Header: React.FC<HeaderProps> = ({
+  searchText = 'Sabyasachi Seal',
+}) => {
   const { pathname } = useRouter()
 
   return (
@@ -66,7 +71,7 @@ export const Header: React.FC = () => {
         <div className={styles.logo}>
           <Logo height={30} width={92} />
         </div>
-        <SearchBar searchText="Sabyasachi Seal" />
+        <SearchBar searchText={searchText} />
         <div className={styles.control}>
           <ThemeButton />
           {dots}
@@ -85,17 +90,20 @@ export const Header: React.FC = () => {
         {routes.map(({ label, route, icon, activeIcon }) => {
           const isActive = pathname === route
           return (
-            <Link key={route} href={route}>
-              <div className={styles.link}>
-                <span
-                  className={classNames(styles.tab, {
-                    [styles.active]: isActive,
-                  })}
-                >
-                  <span>{isActive ? activeIcon : icon}</span> {label}
-                </span>
-              </div>
-            </Link>
+            <a
+              key={route}
+              href={route}
+              className={styles.link}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <span
+                className={classNames(styles.tab, {
+                  [styles.active]: isActive,
+                })}
+              >
+                <span>{isActive ? activeIcon : icon}</span> {label}
+              </span>
+            </a>
           )
         })}
         <div className={styles.overlay} />

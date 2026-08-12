@@ -1,6 +1,7 @@
+import dynamic from 'next/dynamic'
 import { NextPage } from 'next'
 import { useState } from 'react'
-import { CategoryChart, SkillChart, SkillResult } from 'src/components'
+import { SkillResult } from 'src/components'
 import {
   backendData,
   frameworks,
@@ -12,6 +13,17 @@ import {
 import { SkillsContext } from 'src/contexts'
 
 import styles from './Skills.module.scss'
+
+const CategoryChart = dynamic(
+  () => import('src/components/CategoryChart/CategoryChart'),
+  { ssr: false }
+)
+
+const SkillChart = dynamic(
+  () => import('src/components/SkillChart/SkillChart'),
+  { ssr: false }
+)
+
 export const Skills: NextPage = () => {
   const [skill, setSkill] = useState('React')
 

@@ -1,23 +1,24 @@
-import { useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
 
 export const useLocalStorage = <T>(
   key: string,
   initialValue: T
-): [T, (arg0: T) => void] => {
+): [T, (value: SetStateAction<T>) => void] => {
   const isClient = typeof window !== 'undefined'
+  const initialValueRef = useRef(initialValue)
   const [storedValue, setStoredValue] = useState<T>(initialValue)
 
   useEffect(() => {
     try {
       const item = isClient ? window?.localStorage?.getItem(key) : null
-      setStoredValue(item ? (JSON.parse(item) as T) : initialValue)
+      setStoredValue(item ? (JSON.parse(item) as T) : initialValueRef.current)
     } catch (error) {
       console.log(error)
-      setStoredValue(initialValue)
+      setStoredValue(initialValueRef.current)
     }
-  }, [initialValue, isClient, key])
+  }, [isClient, key])
 
-  const setValue = (value: T) => {
+  const setValue = (value: SetStateAction<T>) => {
     try {
       const valueToStore =
         value instanceof Function ? value(storedValue) : value

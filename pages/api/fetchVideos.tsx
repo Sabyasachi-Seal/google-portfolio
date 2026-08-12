@@ -7,6 +7,8 @@ async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
+  const emptyVideos: any[] = []
+
   try {
     if (!playlistId || typeof playlistId !== 'string') {
       return res.status(400).json({ error: 'Missing or invalid playlist ID' })
@@ -17,7 +19,10 @@ async function handler(req: any, res: any) {
     const response = await fetch(feedUrl)
 
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
+      console.warn(
+        `YouTube feed returned ${response.status}; serving an empty videos list`
+      )
+      return res.status(200).json(emptyVideos)
     }
 
     const xmlText = await response.text()
@@ -41,8 +46,8 @@ async function handler(req: any, res: any) {
     )
     res.status(200).json(videos)
   } catch (error) {
-    console.error('Failed to fetch videos:', error)
-    res.status(500).json({ error: 'Failed to fetch videos' })
+    console.warn('Failed to fetch videos; serving an empty list:', error)
+    res.status(200).json(emptyVideos)
   }
 }
 

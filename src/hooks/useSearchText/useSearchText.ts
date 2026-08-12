@@ -1,41 +1,60 @@
-import { useState, useCallback, useEffect } from 'react'
-import { searchTextGeneratorBuilder, sleep } from 'src/utils'
+import { useEffect, useState } from 'react'
 import { l1, l2, l3 } from 'constants/searchText'
 
-const allLst = [l1, l2, l3]
+const prompts = [...l1, ...l2, ...l3]
+const defaultText = 'Sabyasachi Seal'
 
-const randomIndex = Math.floor(Math.random() * allLst.length)
-
-const textList = allLst[randomIndex]
-
-export const useSearchText = (delay = 0) => {
-  const [currentText, setCurrentText] = useState('')
-
-  const animate = useCallback(async () => {
-    const searchTextGenerator = searchTextGeneratorBuilder(
-      textList,
-      'Sabyasachi Seal'
-    )()
-
-    let value, done
-    for (;;) {
-      ;({ value, done } = searchTextGenerator.next())
-      if (done || !value) return
-      const [text, wait] = value
-      await sleep(wait)
-      if (text !== null) {
-        setCurrentText(text)
-      }
-    }
-  }, [])
+export const useSearchText = (delay = 0, enabled = true) => {
+  const [text, setText] = useState(enabled ? defaultText : '')
 
   useEffect(() => {
-    const delayedAnimate = async () => {
-      await sleep(delay)
-      animate()
+    if (!enabled) {
+      setText('')
+      return
     }
-    delayedAnimate()
-  }, [animate, delay])
 
-  return currentText
+    let promptIndex = 0
+    let characterIndex = defaultText.length
+    let phase: 'deleteDefault' | 'typePrompt' | 'holdPrompt' | 'deletePrompt' =
+      'deleteDefault'
+    let timeoutId: ReturnType<typeof setTimeout>
+
+    const typeNextCharacter = () => {
+      const prompt = prompts[promptIndex] ?? defaultText
+      let nextDelay = 45
+
+      if (phase === 'deleteDefault') {
+        characterIndex -= 1
+        setText(defaultText.slice(0, Math.max(characterIndex, 0)))
+        if (characterIndex <= 0) {
+          phase = 'typePrompt'
+          characterIndex = 0
+        }
+      } else if (phase === 'typePrompt') {
+        characterIndex += 1
+        setText(prompt.slice(0, characterIndex))
+        if (characterIndex >= prompt.length) {
+          phase = 'holdPrompt'
+          nextDelay = 1800
+        }
+      } else if (phase === 'holdPrompt') {
+        phase = 'deletePrompt'
+        characterIndex = prompt.length
+      } else {
+        characterIndex -= 1
+        setText(prompt.slice(0, Math.max(characterIndex, 0)))
+        if (characterIndex <= 0) {
+          promptIndex = (promptIndex + 1) % prompts.length
+          phase = 'typePrompt'
+        }
+      }
+
+      timeoutId = setTimeout(typeNextCharacter, nextDelay)
+    }
+
+    timeoutId = setTimeout(typeNextCharacter, delay)
+    return () => clearTimeout(timeoutId)
+  }, [delay, enabled])
+
+  return text
 }
