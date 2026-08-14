@@ -5,8 +5,9 @@
   flex-direction: column;
   align-self: center;
   flex: 1;
+  min-width: 0;
 
-  width: 80vw;
+  width: min(80vw, 100%);
   max-width: 1000px;
 
   font-family: Product Sans, sans-serif;
@@ -20,7 +21,7 @@
 
   @include mobile {
     padding: 0 15px;
-    width: 100vw;
+    width: 100%;
   }
 
   @media (max-width: 600px) {

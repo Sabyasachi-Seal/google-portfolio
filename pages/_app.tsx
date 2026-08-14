@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRef, useCallback, useEffect, useState } from 'react'
 
-import { Compose, Footer, Header } from 'src/components'
+import { AmbientBubbles, Compose, Footer, Header } from 'src/components'
 import { ThemeContextProvider } from 'src/contexts'
 import { useLocalStorage } from 'src/hooks'
 import { useSearchText } from 'src/hooks/useSearchText'
@@ -55,10 +55,9 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
   }, [])
 
   useEffect(() => {
-    if (router.pathname !== '/') {
-      setLanding(false)
-      setIsLandingTyping(false)
-    }
+    const isLandingRoute = router.pathname === '/'
+    setLanding(isLandingRoute)
+    setIsLandingTyping(isLandingRoute)
   }, [router.pathname])
 
   const stopLandingTyping = useCallback(() => {
@@ -145,6 +144,10 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
         <Head>
           <title>Sabyasachi Seal - Google Search</title>
           <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, viewport-fit=cover"
+          />
+          <meta
             name="description"
             content="Personal website of Sabyasachi Seal themed after google search"
           />
@@ -156,28 +159,31 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
           <meta name="referrer" content="no-referrer" />
         </Head>
         <div className="root">
-          {landing ? (
-            <Landing
-              searchText={searchText}
-              searchRef={searchRef}
-              onSearchClick={onSearchClick}
-              onLuckyClick={onLuckyClick}
-              onUserInteraction={stopLandingTyping}
-            />
-          ) : (
-            <>
-              <Header searchText={searchQuery} />
-              <Component
-                {...pageProps}
-                aiSummary={aiSummary}
-                searchQuery={searchQuery}
-                searchInsights={searchInsights}
-                isSummaryLoading={isSummaryLoading}
-                recentSearches={recentSearches}
+          <AmbientBubbles muted={!landing} />
+          <div className="app-content">
+            {landing ? (
+              <Landing
+                searchText={searchText}
+                searchRef={searchRef}
+                onSearchClick={onSearchClick}
+                onLuckyClick={onLuckyClick}
+                onUserInteraction={stopLandingTyping}
               />
-              <Footer />
-            </>
-          )}
+            ) : (
+              <>
+                <Header searchText={searchQuery} />
+                <Component
+                  {...pageProps}
+                  aiSummary={aiSummary}
+                  searchQuery={searchQuery}
+                  searchInsights={searchInsights}
+                  isSummaryLoading={isSummaryLoading}
+                  recentSearches={recentSearches}
+                />
+                <Footer />
+              </>
+            )}
+          </div>
         </div>
       </Compose>
       <Analytics route={router.pathname} />

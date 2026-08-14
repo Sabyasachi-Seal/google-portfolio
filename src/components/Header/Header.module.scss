@@ -115,12 +115,27 @@
 }
 
 .logo {
+  display: flex;
+  align-items: center;
   padding: 4px 28px 0 30px;
   top: 6px;
   margin-left: -152px;
 
   @media (min-width: 1300px) {
     margin-left: -138px;
+  }
+}
+
+.logo,
+.mobileLogo {
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+    border-radius: 4px;
   }
 }
 
@@ -165,4 +180,9 @@
   @include mobile {
     display: flex;
   }
+}
+
+.mobileLogo {
+  display: flex;
+  align-items: center;
 }

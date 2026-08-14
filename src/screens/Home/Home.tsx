@@ -57,6 +57,12 @@ export const Home: NextPage<HomeProps> = ({
   const summaryContent = aiSummary || searchInsights?.summary || ''
   const [typedSummary, setTypedSummary] = useState('')
   const [isTypingSummary, setIsTypingSummary] = useState(false)
+  const [animatedConfidence, setAnimatedConfidence] = useState(0)
+  const rawConfidence = searchInsights?.confidence
+  const confidenceTarget =
+    typeof rawConfidence === 'number' && Number.isFinite(rawConfidence)
+      ? Math.round(Math.max(0, Math.min(1, rawConfidence)) * 100)
+      : null
 
   useEffect(() => {
     if (isSummaryLoading || !summaryContent) {
@@ -81,6 +87,33 @@ export const Home: NextPage<HomeProps> = ({
 
     return () => window.clearInterval(timer)
   }, [isSummaryLoading, summaryContent])
+
+  useEffect(() => {
+    if (isSummaryLoading || confidenceTarget === null) {
+      setAnimatedConfidence(0)
+      return
+    }
+
+    const duration = 900
+    let startTime: number | null = null
+    let frameId = 0
+
+    const animateConfidence = (timestamp: number) => {
+      startTime ??= timestamp
+      const progress = Math.min((timestamp - startTime) / duration, 1)
+      const easedProgress = 1 - Math.pow(1 - progress, 3)
+
+      setAnimatedConfidence(Math.round(confidenceTarget * easedProgress))
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(animateConfidence)
+      }
+    }
+
+    frameId = window.requestAnimationFrame(animateConfidence)
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [confidenceTarget, isSummaryLoading])
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -122,7 +155,6 @@ export const Home: NextPage<HomeProps> = ({
         : extractMatchPhrases(displayQuery),
     [displayQuery, searchInsights?.highlightPhrases]
   )
-  const confidence = Math.round((searchInsights?.confidence ?? 0.72) * 100)
   const hasCompare = Boolean(searchInsights?.compare)
 
   return (
@@ -154,7 +186,13 @@ export const Home: NextPage<HomeProps> = ({
                 <div className={styles.summaryHeader}>AI Overview</div>
                 <div className={styles.summaryQuery}>{displayQuery}</div>
               </div>
-              <div className={styles.confidence}>Confidence {confidence}%</div>
+              <div className={styles.confidence} aria-live="polite">
+                {confidenceTarget === null
+                  ? isSummaryLoading
+                    ? 'Confidence 0%'
+                    : 'Confidence unavailable'
+                  : `Confidence ${animatedConfidence}%`}
+              </div>
             </div>
             {isSummaryLoading ? (
               <LoadProgress />
@@ -234,19 +272,6 @@ export const Home: NextPage<HomeProps> = ({
               />
             ))}
           </section>
-
-          {searchInsights?.sourceChips?.length ? (
-            <section className={styles.linkedSection}>
-              <div className={styles.sectionTitle}>Source chips</div>
-              <div className={styles.chipRow}>
-                {searchInsights.sourceChips.map((item) => (
-                  <span key={item} className={styles.sourceChip}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </section>
-          ) : null}
         </div>
         <div className={styles.info}>
           <SearchAssistantPanel

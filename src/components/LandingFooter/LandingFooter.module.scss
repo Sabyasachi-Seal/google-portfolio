@@ -1,62 +1,89 @@
 @import '/src/styles/base';
 
-.row {
-  @include row;
-  justify-content: space-between;
-
-  padding: 14px;
-  @include themed-styles {
-    border-bottom: 1px solid themed-color(footer-border);
-  }
-
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  @include mobile {
-    justify-content: center;
-
-    span {
-      padding: 2px;
-      font-size: 14px;
-    }
-  }
-}
-
-.content {
-  gap: 25px;
-  display: flex;
-}
-
-.image {
-  margin-right: 6px;
-}
-
-.bottom {
-  @include mobile {
-    .content {
-      display: none;
-      height: 20px;
-    }
-  }
-}
-
 .container {
-  @include col;
-  font-size: 15px;
   align-self: stretch;
+  border-top: 1px solid transparent;
+  padding: 16px 28px calc(16px + env(safe-area-inset-bottom));
 
   @include themed-styles {
-    background-color: themed-color(footer-background);
-    color: themed-color(footer-text);
-
-    a {
-      &:hover {
-        text-decoration: underline;
-      }
-    }
+    background-color: themed-color(background-contrast);
+    border-color: themed-color(footer-border);
+    color: themed-color(text-body);
   }
 }
 
-.carbon {
-  margin-right: 140px;
+.inner {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr auto;
+  align-items: center;
+  gap: 18px 28px;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+
+  @include themed-styles {
+    color: themed-color(text-low-contrast);
+  }
+}
+
+.name {
+  font-family: 'Product Sans', sans-serif;
+  font-size: 15px;
+
+  @include themed-styles {
+    color: themed-color(text-high-contrast);
+  }
+}
+
+.navigation,
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 12px;
+}
+
+.links {
+  justify-content: flex-end;
+}
+
+.navigation a,
+.links a {
+  @include themed-styles {
+    color: themed-color(secondary-accent);
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+@include mobile {
+  .container {
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .inner {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .identity,
+  .links {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navigation {
+    gap: 8px 14px;
+  }
 }

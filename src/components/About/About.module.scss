@@ -127,16 +127,17 @@
 
 .userMessage {
   text-align: center;
-  color: #fff;
-  background: #007bff;
   margin-left: auto;
   max-width: 50%;
+
+  @include themed-styles {
+    color: themed-color(background);
+    background-color: themed-color(secondary-accent);
+  }
 }
 
 .botMessage {
   text-align: left;
-  color: #333;
-  background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   max-width: 80%;
   @include themed-styles {
@@ -157,31 +158,36 @@
 .inputArea input {
   flex: 1;
   padding: 10px;
-  border: 1px solid #e0e0e0;
   border-radius: 20px;
   margin-right: 10px;
   font-size: 12px;
   margin-top: 10px;
   @include themed-styles {
     background-color: themed-color(background-contrast);
+    border: 1px solid themed-color(footer-border);
     color: themed-color(text-high-contrast);
   }
 }
 
 .inputArea button {
   padding: 10px 20px;
-  background: #007bff;
-  color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease;
   margin-top: 10px;
+
+  @include themed-styles {
+    background-color: themed-color(secondary-accent);
+    color: themed-color(background);
+  }
 }
 
 .inputArea button:hover {
-  background: #0056b3;
+  @include themed-styles {
+    background-color: themed-color(primary-accent);
+  }
 }
 
 .border {
@@ -236,7 +242,9 @@
 
 .globe {
   path {
-    fill: #4487f6;
+    @include themed-styles {
+      fill: themed-color(secondary-accent);
+    }
   }
 
   width: 20px;

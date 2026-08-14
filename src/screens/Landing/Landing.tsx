@@ -16,13 +16,6 @@ const quickPrompts = [
   'What is his tech stack?',
 ]
 
-const exploreLinks = [
-  { href: '/projects', label: 'Projects', detail: 'Built and shipped' },
-  { href: '/skills', label: 'Skills', detail: 'Tools and expertise' },
-  { href: '/blogs', label: 'Blogs', detail: 'Ideas and lessons' },
-  { href: '/videos', label: 'Videos', detail: 'Talks and demos' },
-]
-
 interface LandingProps {
   searchText: string
   searchRef: LegacyRef<HTMLInputElement>
@@ -66,13 +59,6 @@ export const Landing: React.FC<LandingProps> = ({
 
   return (
     <div className={styles.container}>
-      <div className={styles.ambient} aria-hidden="true">
-        <span className={classNames(styles.orb, styles.orbBlue)} />
-        <span className={classNames(styles.orb, styles.orbRed)} />
-        <span className={classNames(styles.orb, styles.orbYellow)} />
-        <span className={classNames(styles.orb, styles.orbGreen)} />
-        <span className={styles.grid} />
-      </div>
       <LandingHeader />
       <main className={styles.landing}>
         <div className={styles.eyebrow}>
@@ -137,68 +123,6 @@ export const Landing: React.FC<LandingProps> = ({
           <span>Live projects</span>
           <span>AI answers</span>
           <span>Human-written work</span>
-        </div>
-        <section className={styles.explore} aria-label="Explore portfolio">
-          <div className={styles.exploreHeader}>
-            <span>Explore without searching</span>
-            <span className={styles.exploreRule} />
-          </div>
-          <div className={styles.exploreGrid}>
-            {exploreLinks.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={styles.exploreCard}
-              >
-                <span className={styles.exploreLabel}>{item.label}</span>
-                <span className={styles.exploreDetail}>{item.detail}</span>
-                <span className={styles.arrow} aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-        <div className={classNames(styles.row)}>
-          <div className={styles.content}>
-            Google offered in:
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=bn&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBc"
-              rel="noopener noreferrer"
-            >
-              Bengali
-            </a>
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=hi&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBg"
-              rel="noopener noreferrer"
-            >
-              Hindi
-            </a>
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=ta&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBk"
-              rel="noopener noreferrer"
-            >
-              Tamil
-            </a>
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=kn&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBo"
-              rel="noopener noreferrer"
-            >
-              Kannada
-            </a>
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=ja&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBs"
-              rel="noopener noreferrer"
-            >
-              Japanese
-            </a>
-            <a
-              href="https://www.google.com/setprefs?sig=0_6gxbm4Wplq--sxFnHhzdnpizTg0%3D&hl=ko&source=homepage&sa=X&ved=0ahUKEwiO7ZL7_viDAxViQUEAHcxyAZoQ2ZgBCBw"
-              rel="noopener noreferrer"
-            >
-              Korean
-            </a>
-          </div>
         </div>
       </main>
       <LandingFooter />

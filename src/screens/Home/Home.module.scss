@@ -5,6 +5,8 @@
   @include pad-left;
   margin-left: 10px;
   flex: 1;
+  min-width: 0;
+  width: 100%;
 
   @include mobile {
     margin: 0;
@@ -14,10 +16,13 @@
 .content {
   @include row;
   align-items: flex-start;
+  min-width: 0;
+  width: 100%;
 }
 
 .results {
   width: 652px;
+  max-width: 100%;
   margin-bottom: 40px;
 
   @include mobile {
@@ -34,8 +39,7 @@
 .summaryCard,
 .compareCard,
 .featuredSection,
-.resultsSection,
-.linkedSection {
+.resultsSection {
   margin-bottom: 22px;
   padding: 18px 20px;
   border-radius: 18px;
@@ -106,16 +110,8 @@
   }
 }
 
-.chipRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
-
 .chip,
 .recentChip,
-.sourceChip,
 .relatedChip {
   border-radius: 999px;
   padding: 6px 10px;
@@ -282,6 +278,7 @@
 .info {
   @include col;
   gap: 28px;
+  min-width: 0;
 
   @include mobile {
     display: none;

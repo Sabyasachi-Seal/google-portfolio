@@ -1,4 +1,5 @@
-import { AuthenticateButton, ThemeButton } from 'src/components'
+import { AuthenticateButton, SiteInfoDialog, ThemeButton } from 'src/components'
+import { useState } from 'react'
 import styles from './LandingHeader.module.scss'
 
 export const menu = (
@@ -29,33 +30,52 @@ export const dots = (
 )
 
 export const LandingHeader: React.FC = () => {
-  const gmailAddress = 'iam.sabyasachi.seal.com'
+  const gmailAddress = 'iam.sabyasachi.seal@gmail.com'
+  const [isSiteInfoOpen, setIsSiteInfoOpen] = useState(false)
+
   return (
-    <div className={styles.header}>
-      <div className={styles.links}>
-        {menu}
-        <p className={styles.tab}>ALL</p>
-        <p className={styles.tab}>IMAGES</p>
+    <>
+      <div className={styles.header}>
+        <div className={styles.links}>
+          {menu}
+          <a href="/" className={styles.tab}>
+            ALL
+          </a>
+          <a href="/images" className={styles.tab}>
+            IMAGES
+          </a>
+        </div>
+        <div className={styles.links}>
+          <ThemeButton />
+          <a
+            href={`mailto:${gmailAddress}`}
+            className={styles.app}
+            rel="noopener noreferrer"
+          >
+            Gmail
+          </a>
+          <a
+            href="/images"
+            className={styles.app}
+            aria-label="Open portfolio images"
+          >
+            Images
+          </a>
+          {dots}
+          <AuthenticateButton
+            onClick={() => setIsSiteInfoOpen(true)}
+            aria-label="About this portfolio"
+            aria-haspopup="dialog"
+            aria-expanded={isSiteInfoOpen}
+          >
+            About this site
+          </AuthenticateButton>
+        </div>
       </div>
-      <div className={styles.links}>
-        <ThemeButton />
-        <a
-          href={`mailto:${gmailAddress}`}
-          className={styles.app}
-          rel="noopener noreferrer"
-        >
-          Gmail
-        </a>
-        <a
-          href="https://www.google.com/imghp?hl=en&ogbl"
-          className={styles.app}
-          rel="noopener noreferrer"
-        >
-          Images
-        </a>
-        {dots}
-        <AuthenticateButton>Sign in</AuthenticateButton>
-      </div>
-    </div>
+      <SiteInfoDialog
+        isOpen={isSiteInfoOpen}
+        onClose={() => setIsSiteInfoOpen(false)}
+      />
+    </>
   )
 }

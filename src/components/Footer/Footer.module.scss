@@ -2,6 +2,7 @@
 
 .container {
   padding: 6px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
   font-size: 11px;
   font-family: 'Product Sans', sans-serif;
   @include row;
@@ -9,6 +10,8 @@
 
   @include themed-styles {
     background-color: themed-color(background-contrast);
+    border-top: 1px solid themed-color(footer-border);
+    color: themed-color(text-low-contrast);
 
     a {
       color: themed-color(secondary-accent);

@@ -5,6 +5,8 @@
   @include pad-left;
   margin-left: 10px;
   flex: 1;
+  min-width: 0;
+  width: 100%;
 
   @include mobile {
     margin: 0;
@@ -13,6 +15,7 @@
 
 .results {
   width: 652px;
+  max-width: 100%;
   @include col;
 
   @include mobile {

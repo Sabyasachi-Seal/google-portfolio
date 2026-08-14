@@ -1,0 +1,237 @@
+@import '/src/styles/base';
+
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+  isolation: isolate;
+}
+
+.bubble {
+  position: absolute;
+  width: clamp(150px, 22vw, 280px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0.17;
+  filter: blur(9px);
+  transform-origin: center;
+  will-change: transform, border-radius;
+  animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-play-state: running;
+
+  &::before {
+    position: absolute;
+    inset: 12% 18% auto auto;
+    width: 28%;
+    height: 18%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.32);
+    content: '';
+    filter: blur(6px);
+    transform: rotate(-28deg);
+  }
+}
+
+.blue {
+  top: 10%;
+  left: 6%;
+  background: #4285f4;
+  animation-name: blueBounce;
+  animation-duration: 13s;
+}
+
+.red {
+  top: 23%;
+  right: 7%;
+  background: #ea4335;
+  animation-name: redBounce;
+  animation-duration: 15s;
+  animation-delay: -8s;
+}
+
+.yellow {
+  bottom: 11%;
+  left: 28%;
+  background: #fbbc05;
+  animation-name: yellowBounce;
+  animation-duration: 17s;
+  animation-delay: -14s;
+}
+
+.green {
+  right: 24%;
+  bottom: 17%;
+  background: #34a853;
+  animation-name: greenBounce;
+  animation-duration: 19s;
+  animation-delay: -22s;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.18;
+  background-image: linear-gradient(
+      rgba(66, 133, 244, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(66, 133, 244, 0.08) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 24%,
+    transparent 92%
+  );
+}
+
+.muted {
+  .bubble {
+    width: clamp(120px, 16vw, 210px);
+    opacity: 0.095;
+    filter: blur(10px);
+  }
+
+  .grid {
+    opacity: 0.1;
+  }
+}
+
+@keyframes blueBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+    border-radius: 50%;
+  }
+
+  24% {
+    transform: translate3d(34px, 24px, 0) scale(0.96, 1.04);
+    border-radius: 48% 52% 51% 49%;
+  }
+
+  50% {
+    transform: translate3d(68px, 48px, 0) scale(1.05, 0.95);
+    border-radius: 51% 49% 46% 54%;
+  }
+
+  76% {
+    transform: translate3d(28px, 18px, 0) scale(1.02, 0.98);
+    border-radius: 53% 47% 50% 50%;
+  }
+}
+
+@keyframes redBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+    border-radius: 50%;
+  }
+
+  28% {
+    transform: translate3d(-38px, 30px, 0) scale(1.04, 0.96);
+    border-radius: 52% 48% 47% 53%;
+  }
+
+  54% {
+    transform: translate3d(-72px, 54px, 0) scale(0.95, 1.05);
+    border-radius: 47% 53% 52% 48%;
+  }
+
+  79% {
+    transform: translate3d(-28px, 24px, 0) scale(1.02, 0.98);
+    border-radius: 50% 50% 46% 54%;
+  }
+}
+
+@keyframes yellowBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+    border-radius: 50%;
+  }
+
+  25% {
+    transform: translate3d(38px, -26px, 0) scale(0.95, 1.05);
+    border-radius: 49% 51% 54% 46%;
+  }
+
+  52% {
+    transform: translate3d(78px, -54px, 0) scale(1.05, 0.95);
+    border-radius: 54% 46% 49% 51%;
+  }
+
+  78% {
+    transform: translate3d(30px, -18px, 0) scale(1.02, 0.98);
+    border-radius: 48% 52% 50% 50%;
+  }
+}
+
+@keyframes greenBounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+    border-radius: 50%;
+  }
+
+  26% {
+    transform: translate3d(-40px, -30px, 0) scale(1.04, 0.96);
+    border-radius: 46% 54% 50% 50%;
+  }
+
+  54% {
+    transform: translate3d(-76px, -56px, 0) scale(0.95, 1.05);
+    border-radius: 53% 47% 48% 52%;
+  }
+
+  80% {
+    transform: translate3d(-30px, -20px, 0) scale(1.02, 0.98);
+    border-radius: 50% 50% 54% 46%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble {
+    animation: none;
+    opacity: 0.11;
+    transform: none;
+  }
+}
+
+@include mobile {
+  .bubble {
+    width: clamp(120px, 34vw, 190px);
+    opacity: 0.12;
+    filter: blur(7px);
+  }
+
+  .blue {
+    top: 8%;
+    left: 5%;
+  }
+
+  .red {
+    top: 22%;
+    right: 5%;
+  }
+
+  .yellow {
+    bottom: 13%;
+    left: 22%;
+  }
+
+  .green {
+    right: 12%;
+    bottom: 18%;
+  }
+
+  .muted .bubble {
+    width: clamp(100px, 26vw, 150px);
+    opacity: 0.075;
+  }
+}

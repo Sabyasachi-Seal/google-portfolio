@@ -28,15 +28,19 @@ body {
   padding: 0;
   margin: 0;
   font-family: Roboto, arial, sans-serif;
-  height: 100%;
+  min-height: 100%;
+}
+
+html {
+  min-height: 100%;
 }
 
 body {
-  & > div,
-  & > div > div,
-  & > div > div > div {
-    height: inherit;
-  }
+  overflow-x: hidden;
+}
+
+#__next {
+  min-height: 100%;
 }
 
 button {
@@ -56,18 +60,36 @@ a {
 
 * {
   box-sizing: border-box;
-  transition: all 200ms ease-in-out;
 }
 
 .root {
   @include col;
 
-  height: auto;
+  position: relative;
+  width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  isolation: isolate;
   flex: 1;
 
   @include themed-styles {
     background-color: themed-color(background);
+    color: themed-color(text-body);
+  }
+}
+
+.app-content {
+  @include col;
+
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  @include themed-styles {
     color: themed-color(text-body);
   }
 }
