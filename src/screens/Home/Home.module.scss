@@ -20,16 +20,8 @@
   width: 652px;
   margin-bottom: 40px;
 
-  & > :first-child {
-    display: none;
-  }
-
   @include mobile {
     width: 100%;
-
-    & > :first-child {
-      display: flex;
-    }
 
     @include themed-styles {
       background-color: themed-color(background-contrast);
@@ -43,7 +35,6 @@
 .compareCard,
 .featuredSection,
 .resultsSection,
-.recentSection,
 .linkedSection {
   margin-bottom: 22px;
   padding: 18px 20px;
@@ -90,6 +81,18 @@
   font-family: Roboto, sans-serif;
 }
 
+.typingCursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: cursorBlink 0.8s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
 .confidence {
   border-radius: 999px;
   padding: 6px 12px;
@@ -103,8 +106,7 @@
   }
 }
 
-.chipRow,
-.linkRow {
+.chipRow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -125,12 +127,14 @@
   }
 }
 
-.linkRow a {
-  font-size: 13px;
-  text-decoration: underline;
+.relatedChip {
+  border: none;
+  cursor: pointer;
+  font: inherit;
 
-  @include themed-styles {
-    color: themed-color(primary-accent);
+  &:disabled {
+    cursor: wait;
+    opacity: 0.6;
   }
 }
 

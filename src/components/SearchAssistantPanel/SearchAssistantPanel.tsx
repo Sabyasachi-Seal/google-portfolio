@@ -57,36 +57,39 @@ export const SearchAssistantPanel: React.FC<Props> = ({
     return () => window.clearInterval(timer)
   }, [responseText])
 
-  const sendMessage = useCallback(async () => {
-    const trimmedInput = input.trim()
-    if (!trimmedInput) return
+  const sendMessage = useCallback(
+    async (message = input) => {
+      const trimmedInput = message.trim()
+      if (!trimmedInput) return
 
-    setInput('')
-    setResponseText('')
-    setLoading(true)
+      setInput('')
+      setResponseText('')
+      setLoading(true)
 
-    try {
-      const response = await fetch('/api/callGeminiApi', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mode: 'chat',
-          query,
-          prompt: `Portfolio context: ${query}. Current summary: ${summary}. Follow-up question: ${trimmedInput}`,
-          userInfo: encrypt(userInfo),
-        }),
-      })
+      try {
+        const response = await fetch('/api/callGeminiApi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'chat',
+            query,
+            prompt: `Portfolio context: ${query}. Current summary: ${summary}. Follow-up question: ${trimmedInput}`,
+            userInfo: encrypt(userInfo),
+          }),
+        })
 
-      const data = await response.json()
-      setResponseText(
-        data.response || 'Sorry, I could not answer that right now.'
-      )
-    } catch (error) {
-      setResponseText('Sorry, I could not answer that right now.')
-    } finally {
-      setLoading(false)
-    }
-  }, [input, query, summary])
+        const data = await response.json()
+        setResponseText(
+          data.response || 'Sorry, I could not answer that right now.'
+        )
+      } catch (error) {
+        setResponseText('Sorry, I could not answer that right now.')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [input, query, summary]
+  )
 
   return (
     <aside className={styles.panel}>
@@ -108,7 +111,8 @@ export const SearchAssistantPanel: React.FC<Props> = ({
               key={suggestion}
               type="button"
               className={styles.chip}
-              onClick={() => setInput(suggestion)}
+              onClick={() => void sendMessage(suggestion)}
+              disabled={loading}
             >
               {suggestion}
             </button>
@@ -160,7 +164,11 @@ export const SearchAssistantPanel: React.FC<Props> = ({
             }}
             placeholder="Ask about projects, skills, or comparisons"
           />
-          <button type="button" onClick={sendMessage} disabled={loading}>
+          <button
+            type="button"
+            onClick={() => void sendMessage()}
+            disabled={loading}
+          >
             {loading ? '...' : 'Send'}
           </button>
         </div>

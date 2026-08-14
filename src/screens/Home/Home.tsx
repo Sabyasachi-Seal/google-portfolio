@@ -54,6 +54,33 @@ export const Home: NextPage<HomeProps> = ({
   const displayQuery = searchQuery?.trim() || 'Sabyasachi Seal'
   const [projectResults, setProjectResults] = useState<ProjectResultType[]>([])
   const [projectsLoading, setProjectsLoading] = useState(true)
+  const summaryContent = aiSummary || searchInsights?.summary || ''
+  const [typedSummary, setTypedSummary] = useState('')
+  const [isTypingSummary, setIsTypingSummary] = useState(false)
+
+  useEffect(() => {
+    if (isSummaryLoading || !summaryContent) {
+      setTypedSummary('')
+      setIsTypingSummary(false)
+      return
+    }
+
+    let index = 0
+    setTypedSummary('')
+    setIsTypingSummary(true)
+
+    const timer = window.setInterval(() => {
+      index += 1
+      setTypedSummary(summaryContent.slice(0, index))
+
+      if (index >= summaryContent.length) {
+        window.clearInterval(timer)
+        setIsTypingSummary(false)
+      }
+    }, 18)
+
+    return () => window.clearInterval(timer)
+  }, [isSummaryLoading, summaryContent])
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -130,53 +157,19 @@ export const Home: NextPage<HomeProps> = ({
               <div className={styles.confidence}>Confidence {confidence}%</div>
             </div>
             {isSummaryLoading ? (
-              <LoadProgress count={0} />
+              <LoadProgress />
             ) : (
-              <p className={styles.summaryText}>
-                {aiSummary ||
-                  'Search the portfolio to generate an AI summary that adapts to your exact query.'}
+              <p className={styles.summaryText} aria-live="polite">
+                {summaryContent
+                  ? typedSummary
+                  : 'Search the portfolio to generate an AI summary that adapts to your exact query.'}
+                {isTypingSummary ? (
+                  <span className={styles.typingCursor} aria-hidden="true">
+                    |
+                  </span>
+                ) : null}
               </p>
             )}
-            {matchedPhrases.length ? (
-              <div className={styles.chipRow}>
-                {matchedPhrases.map((phrase) => (
-                  <span key={phrase} className={styles.chip}>
-                    {phrase}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-            {searchInsights?.relatedLinks?.length ? (
-              <div className={styles.linkRow}>
-                {searchInsights.relatedLinks.map((item) => (
-                  <a
-                    key={item.url}
-                    href={item.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {item.label}
-                  </a>
-                ))}
-              </div>
-            ) : null}
-          </section>
-
-          <section className={styles.recentSection}>
-            <div className={styles.sectionTitle}>Recent searches</div>
-            <div className={styles.chipRow}>
-              {recentSearches.length ? (
-                recentSearches.map((item) => (
-                  <span key={item} className={styles.recentChip}>
-                    {item}
-                  </span>
-                ))
-              ) : (
-                <span className={styles.emptyState}>
-                  No recent searches yet
-                </span>
-              )}
-            </div>
           </section>
 
           {featuredProjects.length ? (
@@ -248,19 +241,6 @@ export const Home: NextPage<HomeProps> = ({
               <div className={styles.chipRow}>
                 {searchInsights.sourceChips.map((item) => (
                   <span key={item} className={styles.sourceChip}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </section>
-          ) : null}
-
-          {searchInsights?.relatedQueries?.length ? (
-            <section className={styles.linkedSection}>
-              <div className={styles.sectionTitle}>Related questions</div>
-              <div className={styles.chipRow}>
-                {searchInsights.relatedQueries.map((item) => (
-                  <span key={item} className={styles.relatedChip}>
                     {item}
                   </span>
                 ))}

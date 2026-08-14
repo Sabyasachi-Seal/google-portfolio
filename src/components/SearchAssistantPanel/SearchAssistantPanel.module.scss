@@ -112,6 +112,11 @@
   }
 }
 
+.chip:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .recent {
   @include themed-styles {
     background-color: themed-color(background-contrast);

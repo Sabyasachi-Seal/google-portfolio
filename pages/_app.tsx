@@ -103,10 +103,14 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
       setAiSummary('')
       setSearchInsights(null)
       setIsSummaryLoading(true)
+      // Show the results page immediately while the AI overview loads in the background.
+      setLanding(false)
 
       try {
         const result = await fetchAiSummary(trimmedQuery)
-        setAiSummary(result.response)
+        // Some model responses may contain structured insights without a separate
+        // response string, so always give the overview something to render.
+        setAiSummary(result.response || result.insights?.summary || '')
         setSearchInsights(result.insights)
       } catch (error) {
         console.error('Error fetching AI summary:', error)
@@ -116,7 +120,6 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
         setSearchInsights(null)
       } finally {
         setIsSummaryLoading(false)
-        setLanding(false)
       }
     },
     [fetchAiSummary, setRecentSearches]
