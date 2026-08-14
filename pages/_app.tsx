@@ -6,8 +6,6 @@ import { AmbientBubbles, Compose, Footer, Header } from 'src/components'
 import { ThemeContextProvider } from 'src/contexts'
 import { useLocalStorage } from 'src/hooks'
 import { useSearchText } from 'src/hooks/useSearchText'
-import { encrypt } from 'lib/cryptoUtils'
-import { userInfo } from 'constants/userInfo'
 import { SearchApiResponse, SearchInsights } from 'src/types/searchInsights'
 
 import 'src/styles/globals.scss'
@@ -65,7 +63,6 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
   }, [])
 
   const fetchAiSummary = useCallback(async (prompt: string) => {
-    const encryptedUserInfo = encrypt(userInfo)
     const mode =
       prompt.toLowerCase().includes(' vs ') ||
       prompt.toLowerCase().includes('compare')
@@ -78,8 +75,7 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
       body: JSON.stringify({
         mode,
         query: prompt,
-        prompt: `Provide a search-focused answer for the portfolio query "${prompt}".`,
-        userInfo: encryptedUserInfo,
+        question: prompt,
       }),
     })
 

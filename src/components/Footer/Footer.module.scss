@@ -2,7 +2,7 @@
 
 .container {
   padding: 6px;
-  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
   font-size: 11px;
   font-family: 'Product Sans', sans-serif;
   @include row;

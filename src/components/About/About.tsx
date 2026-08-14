@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { friends, profiles, getBlogs, getProjects } from 'src/content'
+import { friends, profiles } from 'src/content'
 import { SocialProfile, Friend } from 'src/components'
 import styles from './About.module.scss'
-import { userInfo } from 'constants/userInfo'
-import { encrypt } from 'lib/cryptoUtils'
 const globe = (
   <svg
     focusable="false"
@@ -25,8 +23,6 @@ export const About: React.FC = () => {
     },
   ])
   const [input, setInput] = useState('')
-  const [githubData, setGithubData] = useState<any>(null)
-  const [mediumData, setMediumData] = useState<any>(null)
 
   const chatWindowRef = useRef<HTMLDivElement>(null)
 
@@ -38,34 +34,6 @@ export const About: React.FC = () => {
       })
     }
   }, [messages])
-
-  useEffect(() => {
-    const fetchGithubData = async () => {
-      try {
-        const data = await getProjects()
-        setGithubData(data)
-        userInfo.github = githubData
-      } catch (error) {
-        console.error('Error fetching GitHub data:', error)
-      }
-    }
-
-    fetchGithubData()
-  }, [])
-
-  useEffect(() => {
-    const fetchMediumData = async () => {
-      try {
-        const data = await getBlogs()
-        setMediumData(data)
-        userInfo.medium = mediumData
-      } catch (error) {
-        console.error('Error fetching Medium data:', error)
-      }
-    }
-
-    fetchMediumData()
-  }, [])
 
   const handleSendMessage = async () => {
     if (!input.trim()) return
@@ -79,16 +47,11 @@ export const About: React.FC = () => {
     setMessages(updatedMessages)
     setInput('')
 
-    userInfo.github = githubData
-    userInfo.medium = mediumData
-
     try {
-      const encryptedUserInfo = encrypt(userInfo)
-
       const response = await fetch('/api/callGeminiApi', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input, userInfo: encryptedUserInfo }),
+        body: JSON.stringify({ mode: 'chat', question: input }),
       })
 
       if (!response.ok) {

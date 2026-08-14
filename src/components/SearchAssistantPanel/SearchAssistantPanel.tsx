@@ -1,21 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { encrypt } from 'lib/cryptoUtils'
-import { userInfo } from 'constants/userInfo'
 import { SearchInsights } from 'src/types/searchInsights'
 
 import styles from './SearchAssistantPanel.module.scss'
 
 interface Props {
   query: string
-  summary: string
   insights: SearchInsights | null
   recentSearches: string[]
 }
 
 export const SearchAssistantPanel: React.FC<Props> = ({
   query,
-  summary,
   insights,
   recentSearches,
 }) => {
@@ -73,8 +69,7 @@ export const SearchAssistantPanel: React.FC<Props> = ({
           body: JSON.stringify({
             mode: 'chat',
             query,
-            prompt: `Portfolio context: ${query}. Current summary: ${summary}. Follow-up question: ${trimmedInput}`,
-            userInfo: encrypt(userInfo),
+            question: trimmedInput,
           }),
         })
 
@@ -88,7 +83,7 @@ export const SearchAssistantPanel: React.FC<Props> = ({
         setLoading(false)
       }
     },
-    [input, query, summary]
+    [input, query]
   )
 
   return (

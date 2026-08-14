@@ -276,9 +276,6 @@ export const Home: NextPage<HomeProps> = ({
         <div className={styles.info}>
           <SearchAssistantPanel
             query={displayQuery}
-            summary={
-              aiSummary || 'Ask a follow-up question about the search results.'
-            }
             insights={searchInsights ?? null}
             recentSearches={recentSearches}
           />

@@ -3,7 +3,7 @@
 .container {
   align-self: stretch;
   border-top: 1px solid transparent;
-  padding: 16px 28px calc(16px + env(safe-area-inset-bottom));
+  padding: 16px 28px max(16px, env(safe-area-inset-bottom));
 
   @include themed-styles {
     background-color: themed-color(background-contrast);
@@ -68,7 +68,7 @@
 
 @include mobile {
   .container {
-    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    padding: 16px 16px max(16px, env(safe-area-inset-bottom));
   }
 
   .inner {
