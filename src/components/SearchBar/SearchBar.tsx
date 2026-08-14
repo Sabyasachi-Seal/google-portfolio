@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { LegacyRef, useEffect, useRef } from 'react'
+import { FocusEventHandler, LegacyRef, useEffect, useRef } from 'react'
 import styles from './SearchBar.module.scss'
 
 const lens = (
@@ -84,6 +84,7 @@ interface Props {
   clickFunc?: VoidFunction
   onChangeText?: (value: string) => void
   onClick?: VoidFunction
+  onFocus?: FocusEventHandler<HTMLInputElement>
   placeholder?: string
 }
 
@@ -94,6 +95,7 @@ export const SearchBar: React.FC<Props> = ({
   clickFunc = () => void 0,
   onChangeText,
   onClick,
+  onFocus,
   placeholder,
 }) => {
   // Create a ref for the input element (for internal use if searchRef isn’t provided)
@@ -135,6 +137,7 @@ export const SearchBar: React.FC<Props> = ({
         className={classNames(styles.container, {
           [styles.nonempty]: searchText,
           [styles.mobile]: !landing,
+          [styles.landing]: landing,
         })}
       >
         {search}
@@ -144,6 +147,7 @@ export const SearchBar: React.FC<Props> = ({
           value={searchText}
           placeholder={placeholder}
           onClick={onClick}
+          onFocus={onFocus}
           onChange={(e) => onChangeText?.(e.target.value)}
           readOnly={!onChangeText}
           onKeyDown={(e) => {
@@ -173,6 +177,7 @@ export const SearchBar: React.FC<Props> = ({
             value={searchText}
             placeholder={placeholder}
             onClick={onClick}
+            onFocus={onFocus}
             onChange={(e) => onChangeText?.(e.target.value)}
             readOnly={!onChangeText}
           />

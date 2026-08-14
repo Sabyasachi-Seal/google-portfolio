@@ -57,6 +57,22 @@
   }
 }
 
+.landing {
+  width: min(700px, 90vw);
+  height: 52px;
+  transition: transform 180ms ease, box-shadow 180ms ease,
+    border-color 180ms ease;
+
+  &:focus-within {
+    transform: translateY(-2px) scale(1.01);
+
+    @include themed-styles {
+      border-color: themed-color(secondary-accent);
+      box-shadow: 0 10px 30px themed-color(search-bar-shadow);
+    }
+  }
+}
+
 .input {
   display: flex;
   flex: 1;

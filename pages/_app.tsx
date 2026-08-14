@@ -19,6 +19,13 @@ import { useRouter } from 'next/router'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Analytics } from '@vercel/analytics/react'
 
+const luckyQueries = [
+  'Show me an interesting Sabyasachi project',
+  'What is Sabyasachi best at?',
+  'Tell me about Sabyasachi experience',
+  'What technologies does Sabyasachi use?',
+]
+
 function GoogleSearch({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const [landing, setLanding] = useState(router.pathname === '/')
@@ -126,11 +133,10 @@ function GoogleSearch({ Component, pageProps }: AppProps) {
   )
 
   const onLuckyClick = useCallback(() => {
-    setAiSummary('')
-    setSearchInsights(null)
-    setSearchQuery('Sabyasachi Seal')
-    setLanding(false)
-  }, [])
+    const randomQuery =
+      luckyQueries[Math.floor(Math.random() * luckyQueries.length)]
+    void onSearchClick(randomQuery)
+  }, [onSearchClick])
 
   return (
     <>
